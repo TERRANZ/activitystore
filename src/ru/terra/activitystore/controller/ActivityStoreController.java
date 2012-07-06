@@ -1,4 +1,4 @@
-package ru.terra.activitystore.mvc.controller;
+package ru.terra.activitystore.controller;
 
 import java.util.List;
 
@@ -6,10 +6,10 @@ import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.db.entity.Template;
-import ru.terra.activitystore.mvc.model.ActivityStoreModel;
-import ru.terra.activitystore.mvc.view.ActivityStoreView;
+import ru.terra.activitystore.model.ActivityStoreModel;
+import ru.terra.activitystore.view.ActivityStoreView;
 
-public abstract class ActivityStoreController
+public class ActivityStoreController
 {
 	private ActivityStoreModel model;
 	private ActivityStoreView view;
@@ -19,6 +19,12 @@ public abstract class ActivityStoreController
 		super();
 		this.model = model;
 		this.view = view;
+	}
+
+	public void start()
+	{
+		model.start();
+		view.start();
 	}
 
 	public ActivityStoreController()

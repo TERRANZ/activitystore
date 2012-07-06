@@ -20,5 +20,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jdbc2_0-stdext.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jta.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mysql-connector-java-5.1.13-bin.jar"/>
+	<classpathentry kind="lib" path="lib/swt.jar" sourcepath="/home/terranz/projects/src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

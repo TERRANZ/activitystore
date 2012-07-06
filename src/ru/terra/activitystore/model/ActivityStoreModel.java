@@ -1,4 +1,4 @@
-package ru.terra.activitystore.mvc.model;
+package ru.terra.activitystore.model;
 
 import java.util.List;
 
@@ -13,6 +13,8 @@ public abstract class ActivityStoreModel
 	{
 		return new HibernateModelImpl();
 	}
+
+	public abstract void start();
 
 	public abstract List<Block> getBlocks(Block root);
 

@@ -9,5 +9,5 @@ public class CellPersistanceManager extends PersistanceManager<Cell>
 	public Cell findById(Integer id)
 	{
 		return null;
-	}	
+	}
 }
