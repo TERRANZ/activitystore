@@ -67,7 +67,7 @@ public class HibernateModelImpl extends ActivityStoreModel
 	public Block createBlock(String name, Block parent)
 	{
 		Block newBlock = new Block();
-		newBlock.setBlock(parent);
+		newBlock.setParent(parent.getId());
 		newBlock.setName(name);
 		bpm.insert(newBlock);
 		return newBlock;

@@ -20,7 +20,7 @@ public class BlockPersistanceManager extends PersistanceManager<Block>
 	public List<Block> getChildrenBlocks(Block root)
 	{
 		Criteria c = session.createCriteria(Block.class);
-		c.add(Restrictions.eq("parent", root.getId().getId()));
+		c.add(Restrictions.eq("parent", root.getId()));
 		return c.list();
 	}
 }

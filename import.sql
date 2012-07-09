@@ -26,10 +26,8 @@ CREATE TABLE `block` (
   `parent` int(10) unsigned NOT NULL,
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `update_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`,`parent`),
-  KEY `parent` (`parent`),
-  CONSTRAINT `block_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `block` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `block` */
 
@@ -65,27 +63,14 @@ CREATE TABLE `cell` (
   `card_id` int(11) unsigned NOT NULL,
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `update_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`,`card_id`),
+  PRIMARY KEY (`id`),
   KEY `cell_to_card_fk` (`card_id`),
   KEY `cell_to_list_fk` (`list_id`),
-  CONSTRAINT `cell_to_list_fk` FOREIGN KEY (`list_id`) REFERENCES `list` (`id`),
-  CONSTRAINT `cell_to_card_fk` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`)
+  CONSTRAINT `cell_to_card_fk` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`),
+  CONSTRAINT `cell_to_list_fk` FOREIGN KEY (`list_id`) REFERENCES `vlist` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `cell` */
-
-/*Table structure for table `list` */
-
-DROP TABLE IF EXISTS `list`;
-
-CREATE TABLE `list` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `update_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `list` */
 
 /*Table structure for table `list_val` */
 
@@ -95,9 +80,9 @@ CREATE TABLE `list_val` (
   `val_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `list_id` int(10) unsigned NOT NULL,
   `value` varchar(500) NOT NULL,
-  PRIMARY KEY (`val_id`,`list_id`),
+  PRIMARY KEY (`val_id`),
   KEY `list_id` (`list_id`),
-  CONSTRAINT `list_val_ibfk_1` FOREIGN KEY (`list_id`) REFERENCES `list` (`id`)
+  CONSTRAINT `list_val_ibfk_1` FOREIGN KEY (`list_id`) REFERENCES `vlist` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `list_val` */
@@ -112,12 +97,25 @@ CREATE TABLE `template` (
   `card` int(10) unsigned NOT NULL,
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `update_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`,`card`),
+  PRIMARY KEY (`id`),
   KEY `card` (`card`),
   CONSTRAINT `template_ibfk_1` FOREIGN KEY (`card`) REFERENCES `card` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `template` */
+
+/*Table structure for table `vlist` */
+
+DROP TABLE IF EXISTS `vlist`;
+
+CREATE TABLE `vlist` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `vlist` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

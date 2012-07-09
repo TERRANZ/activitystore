@@ -67,7 +67,7 @@ public class MainWindow extends ActivityStoreView
 
 	private void createTree()
 	{
-		tree = new Tree(shell, SWT.BORDER);		
+		tree = new Tree(shell, SWT.BORDER);
 	}
 
 	@Override
@@ -78,10 +78,10 @@ public class MainWindow extends ActivityStoreView
 			TreeItem newItem = new TreeItem(tree, 0);
 			newItem.setText(b.getName());
 			newItem.setData(b);
-			if (b.getBlocks() != null)
-			{
-				fillTree(newItem, b.getBlocks());
-			}
+			// if (b.getBlocks() != null)
+			// {
+			// fillTree(newItem, b.getBlocks());
+			// }
 		}
 	}
 
@@ -92,10 +92,10 @@ public class MainWindow extends ActivityStoreView
 			TreeItem newItem = new TreeItem(parent, 0);
 			newItem.setText(b.getName());
 			newItem.setData(b);
-			if (b.getBlocks() != null)
-			{
-				fillTree(newItem, b.getBlocks());
-			}
+			// if (b.getBlocks() != null)
+			// {
+			// fillTree(newItem, b.getBlocks());
+			// }
 		}
 	}
 }

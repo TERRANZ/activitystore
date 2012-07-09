@@ -22,7 +22,7 @@ public class CardPersistanceManager extends PersistanceManager<Card>
 	public List<Card> getCardsFromBlock(Block block)
 	{
 		Criteria c = session.createCriteria(Card.class);
-		c.add(Restrictions.eq("blockId", block.getId().getId()));
+		c.add(Restrictions.eq("blockId", block.getId()));
 		return c.list();
 	}
 }
