@@ -78,6 +78,11 @@ public class ActivityStoreController
 		return model.createCard(name, parent);
 	}
 
+	public Card createCard(String name, Template parent)
+	{
+		return model.createCard(name, parent);
+	}
+
 	public Boolean deleteCard(Card card, Boolean recursive)
 	{
 		return model.deleteCard(card, recursive);
@@ -93,4 +98,18 @@ public class ActivityStoreController
 		return model.deleteCellFromCard(cell, card);
 	}
 
+	public Block addCardToBlock(Card card, Block block)
+	{
+		return model.addCardToBlock(card, block);
+	}
+
+	public Block getBlock(Integer id)
+	{
+		return model.getBlock(id);
+	}
+
+	public Card getCard(Integer id)
+	{
+		return model.getCard(id);
+	}
 }

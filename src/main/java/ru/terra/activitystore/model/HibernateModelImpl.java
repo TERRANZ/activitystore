@@ -67,7 +67,7 @@ public class HibernateModelImpl extends ActivityStoreModel
 	public Block createBlock(String name, Block parent)
 	{
 		Block newBlock = new Block();
-		newBlock.setParent(parent.getId());
+		newBlock.setParent(parent != null ? parent.getId() : null);
 		newBlock.setName(name);
 		bpm.insert(newBlock);
 		return newBlock;
@@ -76,19 +76,39 @@ public class HibernateModelImpl extends ActivityStoreModel
 	@Override
 	public Boolean deleteBlock(Block block, Boolean recursive)
 	{
-		return null;
+		if (recursive)
+		{
+			for (Block c : getBlocks(block))
+			{
+				deleteBlock(c, true);
+				bpm.delete(c);
+			}
+		}
+		bpm.delete(block);
+		return true;
 	}
 
 	@Override
 	public Card createCard(String name, Block parent)
 	{
-		return null;
+		Card newCard = new Card();
+		newCard.setName(name);
+		newCard.setBlockId(parent.getId());
+		cardpm.insert(newCard);
+		return newCard;
 	}
 
 	@Override
 	public Boolean deleteCard(Card card, Boolean recursive)
 	{
-
+		if (recursive)
+		{
+			for (Cell c : getCells(card))
+			{
+				cellpm.delete(c);
+			}
+		}
+		cardpm.delete(card);
 		return null;
 	}
 
@@ -111,6 +131,35 @@ public class HibernateModelImpl extends ActivityStoreModel
 	@Override
 	public void start()
 	{
+	}
+
+	@Override
+	public Block addCardToBlock(Card card, Block block)
+	{
+		card.setBlockId(block.getId());
+		return block;
+	}
+
+	@Override
+	public Card createCard(String name, Template parent)
+	{
+		Card newCard = new Card();
+		newCard.setName(name);
+		newCard.setTemplateId(parent.getId());
+		cardpm.insert(newCard);
+		return newCard;
+	}
+
+	@Override
+	public Block getBlock(Integer id)
+	{
+		return bpm.findById(id);
+	}
+
+	@Override
+	public Card getCard(Integer id)
+	{
+		return cardpm.findById(id);
 	}
 
 }

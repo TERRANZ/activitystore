@@ -2,11 +2,13 @@ package ru.terra.activitystore.db.entity;
 // Generated 09.07.2012 18:44:53 by Hibernate Tools 3.2.1.GA
 
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,7 +26,7 @@ public class Block  implements java.io.Serializable {
 
      private Integer id;
      private String name;
-     private int parent;
+     private Integer parent;
      private Date creationDate;
      private Date updateDate;
 
@@ -32,7 +34,7 @@ public class Block  implements java.io.Serializable {
     }
 
 	
-    public Block(String name, int parent, Date creationDate) {
+    public Block(String name, Integer parent, Date creationDate) {
         this.name = name;
         this.parent = parent;
         this.creationDate = creationDate;
@@ -65,11 +67,11 @@ public class Block  implements java.io.Serializable {
     }
     
     @Column(name="parent", nullable=false)
-    public int getParent() {
+    public Integer getParent() {
         return this.parent;
     }
     
-    public void setParent(int parent) {
+    public void setParent(Integer parent) {
         this.parent = parent;
     }
     @Temporal(TemporalType.TIMESTAMP)

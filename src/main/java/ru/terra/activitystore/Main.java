@@ -5,8 +5,6 @@
 package ru.terra.activitystore;
 
 import ru.terra.activitystore.controller.ActivityStoreController;
-import ru.terra.activitystore.gui.swt.MainWindow;
-import ru.terra.activitystore.view.ActivityStoreView;
 
 /**
  * 

@@ -34,9 +34,17 @@ public abstract class ActivityStoreModel
 
 	public abstract Card createCard(String name, Block parent);
 
+	public abstract Card createCard(String name, Template parent);
+
 	public abstract Boolean deleteCard(Card card, Boolean recursive);
 
 	public abstract Card addCellToCard(Cell cell, Card card);
 
 	public abstract Card deleteCellFromCard(Cell cell, Card card);
+
+	public abstract Block addCardToBlock(Card card, Block block);
+
+	public abstract Block getBlock(Integer id);
+
+	public abstract Card getCard(Integer id);
 }
