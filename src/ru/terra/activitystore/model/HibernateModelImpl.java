@@ -7,14 +7,23 @@ import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.db.entity.Template;
 import ru.terra.activitystore.db.manager.BlockPersistanceManager;
+import ru.terra.activitystore.db.manager.CardPersistanceManager;
+import ru.terra.activitystore.db.manager.CellPersistanceManager;
+import ru.terra.activitystore.db.manager.TemplatePersistanceManager;
 
 public class HibernateModelImpl extends ActivityStoreModel
 {
 	private BlockPersistanceManager bpm;
+	private CardPersistanceManager cardpm;
+	private TemplatePersistanceManager tpm;
+	private CellPersistanceManager cellpm;
 
 	public HibernateModelImpl()
 	{
 		bpm = new BlockPersistanceManager();
+		cardpm = new CardPersistanceManager();
+		tpm = new TemplatePersistanceManager();
+		cellpm = new CellPersistanceManager();
 	}
 
 	@Override
@@ -26,26 +35,26 @@ public class HibernateModelImpl extends ActivityStoreModel
 	@Override
 	public List<Card> getCards(Block block)
 	{
-		return null;
+		return cardpm.getCardsFromBlock(block);
 	}
 
 	@Override
 	public List<Cell> getCells(Card card)
 	{
-		return null;
+		return cellpm.getCellsFromCard(card);
 	}
 
 	@Override
 	public List<Cell> getAllCells()
 	{
-		return null;
+		return cellpm.findAll(Cell.class);
 	}
 
 	@Override
 	public List<Template> getTemplates()
 	{
 
-		return null;
+		return tpm.findAll(Template.class);
 	}
 
 	@Override
@@ -86,13 +95,17 @@ public class HibernateModelImpl extends ActivityStoreModel
 	@Override
 	public Card addCellToCard(Cell cell, Card card)
 	{
-		return null;
+		card.getCells().add(cell);
+		cardpm.update(card);
+		return card;
 	}
 
 	@Override
 	public Card deleteCellFromCard(Cell cell, Card card)
 	{
-		return null;
+		card.getCells().remove(cell);
+		cardpm.update(card);
+		return card;
 	}
 
 	@Override
