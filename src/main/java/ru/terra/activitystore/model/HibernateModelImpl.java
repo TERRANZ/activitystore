@@ -162,4 +162,10 @@ public class HibernateModelImpl extends ActivityStoreModel
 		return cardpm.findById(id);
 	}
 
+	@Override
+	public List<Block> getAllBlocks()
+	{
+		return bpm.findAll(Block.class);
+	}
+
 }

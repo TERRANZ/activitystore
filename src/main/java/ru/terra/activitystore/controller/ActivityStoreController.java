@@ -112,4 +112,9 @@ public class ActivityStoreController
 	{
 		return model.getCard(id);
 	}
+
+	public void onViewStarted()
+	{
+		view.fillBlocksTree(model.getAllBlocks());
+	}
 }

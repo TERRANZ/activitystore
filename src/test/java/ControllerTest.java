@@ -10,7 +10,7 @@ public class ControllerTest
 	public void CreateAndDeleteTest()
 	{
 		ActivityStoreController controller = new ActivityStoreController();
-		Block root = controller.createBlock("root", controller.getBlock(0));
+		Block root = controller.getBlock(0);
 		for (int i = 0; i <= 10; i++)
 		{
 			Block level1 = controller.createBlock("level" + i, root);
