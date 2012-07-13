@@ -22,5 +22,5 @@ public class BlockPersistanceManager extends PersistanceManager<Block>
 		Criteria c = session.createCriteria(Block.class);
 		c.add(Restrictions.eq("parent", root.getId()));
 		return c.list();
-	}	
+	}
 }

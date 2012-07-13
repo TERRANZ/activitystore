@@ -4,6 +4,7 @@ import java.util.List;
 
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
+import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.gui.swt.MainWindow;
 
 public abstract class ActivityStoreView

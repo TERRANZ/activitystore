@@ -6,8 +6,10 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -19,12 +21,33 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
+import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.view.ActivityStoreView;
 
 public class MainWindow extends ActivityStoreView
 {
 	private Shell shell;
 	private Tree tree;
+	private Composite formWrapper;
+	private Image xImage;
+
+	private class ViewHolder
+	{
+
+		public static final int BLOCK = 0;
+		public static final int CARD = 1;
+
+		public int type;
+		public Block block;
+		public Card card;
+
+		public ViewHolder(Block block, Card card, int type)
+		{
+			this.block = block;
+			this.card = card;
+			this.type = type;
+		}
+	}
 
 	public MainWindow(ActivityStoreController controller)
 	{
@@ -35,10 +58,18 @@ public class MainWindow extends ActivityStoreView
 	public void start()
 	{
 		Display display = new Display();
+		xImage = new Image(display, 16, 16);
+		GC gc = new GC(xImage);
+		gc.setForeground(display.getSystemColor(SWT.COLOR_RED));
+		gc.drawLine(1, 1, 14, 14);
+		gc.drawLine(1, 14, 14, 1);
+		gc.drawOval(2, 2, 11, 11);
+		gc.dispose();
 		shell = new Shell(display);
-		shell.setLayout(new RowLayout(SWT.HORIZONTAL));
+		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		fillMenu();
 		createTree();
+		formWrapper = new Composite(shell, SWT.NONE);
 		shell.open();
 		controller.onViewStarted();
 		while (!shell.isDisposed())
@@ -86,7 +117,8 @@ public class MainWindow extends ActivityStoreView
 			{
 				// if (tree.getTopItem().getItemCount() == 0)
 				// {
-				tree.setMenu(rootMenu);
+				// tree.setMenu(rootMenu);
+				// System.out.println("selected: "+ ((Block) arg0.item.getData()).getName());
 				// }
 				// else if (tree.getTopItem().getItemCount() == 1)
 				// {
@@ -132,8 +164,6 @@ public class MainWindow extends ActivityStoreView
 
 			public void widgetDefaultSelected(SelectionEvent arg0)
 			{
-				// TODO Auto-generated method stub
-
 			}
 
 		});
@@ -159,7 +189,18 @@ public class MainWindow extends ActivityStoreView
 			}
 
 			newItem.setText(b.getName());
-			newItem.setData(b);
+			newItem.setData(new ViewHolder(b, null, ViewHolder.BLOCK));
+			newItem.setImage(xImage);
+			List<Card> cards = controller.getCards(b);
+			if (cards != null)
+			{
+				for (Card c : cards)
+				{
+					TreeItem cardItem = new TreeItem(newItem, 0);
+					cardItem.setData(new ViewHolder(null, c, ViewHolder.CARD));
+					cardItem.setText(c.getName());
+				}
+			}
 			blockMap.put(b.getId(), newItem);
 		}
 	}
