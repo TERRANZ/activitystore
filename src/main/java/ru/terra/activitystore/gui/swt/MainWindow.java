@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -35,7 +36,7 @@ public class MainWindow extends ActivityStoreView
 	{
 		Display display = new Display();
 		shell = new Shell(display);
-		shell.setLayout(new FillLayout());
+		shell.setLayout(new RowLayout(SWT.HORIZONTAL));
 		fillMenu();
 		createTree();
 		shell.open();
@@ -83,22 +84,22 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void handleEvent(Event arg0)
 			{
-//				if (tree.getTopItem().getItemCount() == 0)
-//				{
-					tree.setMenu(rootMenu);
-//				}
-//				else if (tree.getTopItem().getItemCount() == 1)
-//				{
-//					TreeItem[] itemSelected = tree.getSelection();
-//					if (itemSelected[0].getText() == "Root")
-//					{
-//						tree.setMenu(null);
-//					}
-//					else
-//						tree.setMenu(childMenu);
-//				}
-//				else
-//					tree.setMenu(null);
+				// if (tree.getTopItem().getItemCount() == 0)
+				// {
+				tree.setMenu(rootMenu);
+				// }
+				// else if (tree.getTopItem().getItemCount() == 1)
+				// {
+				// TreeItem[] itemSelected = tree.getSelection();
+				// if (itemSelected[0].getText() == "Root")
+				// {
+				// tree.setMenu(null);
+				// }
+				// else
+				// tree.setMenu(childMenu);
+				// }
+				// else
+				// tree.setMenu(null);
 
 			}
 		});
