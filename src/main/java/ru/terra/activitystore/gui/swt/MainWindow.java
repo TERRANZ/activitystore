@@ -85,7 +85,7 @@ public class MainWindow extends ActivityStoreView
 		Menu bar = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(bar);
 		MenuItem fileItem = new MenuItem(bar, SWT.CASCADE);
-		fileItem.setText("&File");
+		fileItem.setText("&Управление");
 		Menu submenu = new Menu(shell, SWT.DROP_DOWN);
 		fileItem.setMenu(submenu);
 		MenuItem item = new MenuItem(submenu, SWT.PUSH);
@@ -93,11 +93,10 @@ public class MainWindow extends ActivityStoreView
 		{
 			public void handleEvent(Event e)
 			{
-				System.out.println("Select All");
+				System.exit(0);
 			}
 		});
-		item.setText("Select &All\tCtrl+A");
-		item.setAccelerator(SWT.MOD1 + 'A');
+		item.setText("Выход");
 		createBlockMenu();
 		createCardMenu();
 	}
@@ -111,13 +110,15 @@ public class MainWindow extends ActivityStoreView
 		createCardMenuItem.setText("Новая карточка");
 		MenuItem deleteMenuItem = new MenuItem(blockMenu, SWT.PUSH);
 		deleteMenuItem.setText("Удалить");
+		MenuItem editBlockName = new MenuItem(blockMenu, SWT.PUSH);
+		editBlockName.setText("Редактировать");
 		createBlockMenuItem.addSelectionListener(new SelectionListener()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
 				NewBlockInputDialog dlg = new NewBlockInputDialog(shell);
-				String name = dlg.open();
+				String name = dlg.open(null);
 				if (name != null)
 				{
 					TreeItem parent = tree.getSelection()[0];
@@ -172,6 +173,37 @@ public class MainWindow extends ActivityStoreView
 			{
 			}
 		});
+
+		editBlockName.addSelectionListener(new SelectionListener()
+		{
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+				TreeItem selectedItem = tree.getSelection()[0];
+				if (selectedItem != null)
+				{
+					ViewHolder vh = (ViewHolder) selectedItem.getData();
+					if (vh.type == ViewHolder.BLOCK)
+					{
+						NewBlockInputDialog dlg = new NewBlockInputDialog(shell);
+						Block selectedBlock = vh.block;
+						String name = dlg.open(selectedBlock.getName());
+						selectedBlock.setName(name);
+						controller.updateBlock(selectedBlock);
+						vh.block = selectedBlock;
+						selectedItem.setData(vh);
+						selectedItem.setText(name);
+					}
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+
+			}
+		});
 	}
 
 	private void createCardMenu()
@@ -201,6 +233,23 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+			}
+		});
+
+		MenuItem printCardMenuItem = new MenuItem(cardMenu, SWT.PUSH);
+		printCardMenuItem.setText("Печать");
+		printCardMenuItem.addSelectionListener(new SelectionListener()
+		{
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+
 			}
 
 			@Override

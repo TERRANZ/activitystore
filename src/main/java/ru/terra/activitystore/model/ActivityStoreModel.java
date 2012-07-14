@@ -51,4 +51,8 @@ public abstract class ActivityStoreModel
 	public abstract Card getCard(Integer id);
 
 	public abstract Boolean addBlockToBlock(Block newBlock, Block parent);
+
+	public abstract void updateBlock(Block block);
+
+	public abstract void updateCard(Card card);
 }

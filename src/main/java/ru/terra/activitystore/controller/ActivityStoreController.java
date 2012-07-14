@@ -1,5 +1,6 @@
 package ru.terra.activitystore.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import ru.terra.activitystore.db.entity.Block;
@@ -121,5 +122,17 @@ public class ActivityStoreController
 	public void addBlockToBlock(Block newBlock, Block parent)
 	{
 		model.addBlockToBlock(newBlock, parent);
+	}
+
+	public void updateBlock(Block block)
+	{
+		block.setUpdateDate(new Date());
+		model.updateBlock(block);
+	}
+
+	public void updateCard(Card card)
+	{
+		card.setUpdateDate(new Date());
+		model.updateCard(card);
 	}
 }

@@ -37,9 +37,10 @@ public abstract class PersistanceManager<T>
 	{
 		try
 		{
-			// session.beginTransaction();
-			session.update(o);
-			session.flush();
+			session.beginTransaction();
+			session.merge(o);
+			// session.flush();
+			session.getTransaction().commit();
 		} catch (HibernateException he)
 		{
 			he.printStackTrace();

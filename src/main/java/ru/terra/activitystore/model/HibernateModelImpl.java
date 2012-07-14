@@ -176,4 +176,16 @@ public class HibernateModelImpl extends ActivityStoreModel
 		return true;
 	}
 
+	@Override
+	public void updateBlock(Block block)
+	{
+		bpm.update(block);
+	}
+
+	@Override
+	public void updateCard(Card card)
+	{
+		cardpm.update(card);
+	}
+
 }

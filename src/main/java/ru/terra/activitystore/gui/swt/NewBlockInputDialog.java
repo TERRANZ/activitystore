@@ -22,10 +22,11 @@ public class NewBlockInputDialog extends Dialog
 		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 	}
 
-	public String open()
+	public String open(String blockName)
 	{
 		Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
+		this.blockName = blockName;
 		createContents(shell);
 		shell.pack();
 		shell.open();
@@ -51,6 +52,8 @@ public class NewBlockInputDialog extends Dialog
 		label.setLayoutData(data);
 
 		final Text text = new Text(shell, SWT.BORDER);
+		if (blockName != null)
+			text.setText(blockName);
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		text.setLayoutData(data);
