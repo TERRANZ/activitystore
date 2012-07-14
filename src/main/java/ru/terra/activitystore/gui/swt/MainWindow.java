@@ -29,11 +29,11 @@ public class MainWindow extends ActivityStoreView
 	private Shell shell;
 	private Tree tree;
 	private Composite formWrapper;
-	private Image xImage;
+	private Image blockImage;
+	private Menu blockMenu, cardMenu;
 
 	private class ViewHolder
 	{
-
 		public static final int BLOCK = 0;
 		public static final int CARD = 1;
 
@@ -58,8 +58,8 @@ public class MainWindow extends ActivityStoreView
 	public void start()
 	{
 		Display display = new Display();
-		xImage = new Image(display, 16, 16);
-		GC gc = new GC(xImage);
+		blockImage = new Image(display, 16, 16);
+		GC gc = new GC(blockImage);
 		gc.setForeground(display.getSystemColor(SWT.COLOR_RED));
 		gc.drawLine(1, 1, 14, 14);
 		gc.drawLine(1, 14, 14, 1);
@@ -98,76 +98,148 @@ public class MainWindow extends ActivityStoreView
 		});
 		item.setText("Select &All\tCtrl+A");
 		item.setAccelerator(SWT.MOD1 + 'A');
+		createBlockMenu();
+		createCardMenu();
+	}
+
+	private void createBlockMenu()
+	{
+		blockMenu = new Menu(shell, SWT.POP_UP);
+		MenuItem createBlockMenuItem = new MenuItem(blockMenu, SWT.PUSH);
+		createBlockMenuItem.setText("Новый блок");
+		MenuItem createCardMenuItem = new MenuItem(blockMenu, SWT.PUSH);
+		createCardMenuItem.setText("Новая карточка");
+		MenuItem deleteMenuItem = new MenuItem(blockMenu, SWT.PUSH);
+		deleteMenuItem.setText("Удалить");
+		createBlockMenuItem.addSelectionListener(new SelectionListener()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+				NewBlockInputDialog dlg = new NewBlockInputDialog(shell);
+				String name = dlg.open();
+				if (name != null)
+				{
+					TreeItem parent = tree.getSelection()[0];
+					if (parent != null)
+					{
+						ViewHolder vh = (ViewHolder) parent.getData();
+						if (vh.type == ViewHolder.BLOCK)
+						{
+							Block newBlock = new Block();
+							newBlock.setName(name);
+							ViewHolder newVH = new ViewHolder(newBlock, null, ViewHolder.BLOCK);
+							TreeItem newItem = new TreeItem(parent, 0);
+							newItem.setText(name);
+							newItem.setData(newVH);
+							newItem.setImage(blockImage);
+							controller.addBlockToBlock(newBlock, vh.block);
+						}
+					}
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+			}
+		});
+
+		createCardMenuItem.addSelectionListener(new SelectionListener()
+		{
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+			}
+		});
+
+		deleteMenuItem.addSelectionListener(new SelectionListener()
+		{
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+			}
+		});
+	}
+
+	private void createCardMenu()
+	{
+		cardMenu = new Menu(shell, SWT.POP_UP);
+		MenuItem editCardMenuItem = new MenuItem(cardMenu, SWT.PUSH);
+		editCardMenuItem.setText("Редактировать");
+		editCardMenuItem.addSelectionListener(new SelectionListener()
+		{
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+			}
+		});
+
+		MenuItem deleteCardMenuItem = new MenuItem(cardMenu, SWT.PUSH);
+		deleteCardMenuItem.setText("Удалить");
+		deleteCardMenuItem.addSelectionListener(new SelectionListener()
+		{
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+			}
+		});
 	}
 
 	private void createTree()
 	{
 		tree = new Tree(shell, SWT.BORDER);
-		final Menu rootMenu = new Menu(shell, SWT.POP_UP);
-		MenuItem addChild = new MenuItem(rootMenu, SWT.PUSH);
-		addChild.setText("Add first Item");
-		final Menu childMenu = new Menu(shell, SWT.POP_UP);
-		MenuItem childMenuItem = new MenuItem(childMenu, SWT.PUSH);
-		childMenuItem.setText("delete Item");
 		tree.addListener(SWT.Selection, new Listener()
 		{
 
 			@Override
 			public void handleEvent(Event arg0)
 			{
-				// if (tree.getTopItem().getItemCount() == 0)
-				// {
-				// tree.setMenu(rootMenu);
-				// System.out.println("selected: "+ ((Block) arg0.item.getData()).getName());
-				// }
-				// else if (tree.getTopItem().getItemCount() == 1)
-				// {
-				// TreeItem[] itemSelected = tree.getSelection();
-				// if (itemSelected[0].getText() == "Root")
-				// {
-				// tree.setMenu(null);
-				// }
-				// else
-				// tree.setMenu(childMenu);
-				// }
-				// else
-				// tree.setMenu(null);
-
+				if (tree.getSelection() != null)
+				{
+					TreeItem item = tree.getSelection()[0];
+					if (item != null)
+					{
+						if (((ViewHolder) item.getData()).type == ViewHolder.BLOCK)
+						{
+							tree.setMenu(blockMenu);
+						}
+						else
+						{
+							tree.setMenu(cardMenu);
+						}
+					}
+					else
+					{
+						tree.setMenu(null);
+					}
+				}
 			}
 		});
-		addChild.addSelectionListener(new SelectionListener()
-		{
-
-			public void widgetSelected(SelectionEvent arg0)
-			{
-				TreeItem item = new TreeItem(tree, SWT.PUSH);
-				item.setText("Child");
-
-			}
-
-			public void widgetDefaultSelected(SelectionEvent arg0)
-			{
-				// TODO Auto-generated method stub
-
-			}
-
-		});
-
-		childMenuItem.addSelectionListener(new SelectionListener()
-		{
-
-			public void widgetSelected(SelectionEvent arg0)
-			{
-				TreeItem[] item = tree.getSelection();
-				item[0].dispose();
-			}
-
-			public void widgetDefaultSelected(SelectionEvent arg0)
-			{
-			}
-
-		});
-
 	}
 
 	@Override
@@ -190,7 +262,7 @@ public class MainWindow extends ActivityStoreView
 
 			newItem.setText(b.getName());
 			newItem.setData(new ViewHolder(b, null, ViewHolder.BLOCK));
-			newItem.setImage(xImage);
+			newItem.setImage(blockImage);
 			List<Card> cards = controller.getCards(b);
 			if (cards != null)
 			{

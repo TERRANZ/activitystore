@@ -117,4 +117,9 @@ public class ActivityStoreController
 	{
 		view.fillBlocksTree(model.getAllBlocks());
 	}
+
+	public void addBlockToBlock(Block newBlock, Block parent)
+	{
+		model.addBlockToBlock(newBlock, parent);
+	}
 }

@@ -168,4 +168,12 @@ public class HibernateModelImpl extends ActivityStoreModel
 		return bpm.findAll(Block.class);
 	}
 
+	@Override
+	public Boolean addBlockToBlock(Block newBlock, Block parent)
+	{
+		newBlock.setParent(parent.getId());
+		bpm.insert(newBlock);
+		return true;
+	}
+
 }
