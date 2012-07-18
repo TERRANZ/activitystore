@@ -117,7 +117,7 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				NewBlockInputDialog dlg = new NewBlockInputDialog(shell);
+				BlockInputDialog dlg = new BlockInputDialog(shell);
 				String name = dlg.open(null);
 				if (name != null)
 				{
@@ -152,6 +152,24 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
+				EditCardDialog dlg = new EditCardDialog(shell);
+				Card card = dlg.open(null);
+				if (card != null)
+				{
+					TreeItem parent = tree.getSelection()[0];
+					if (parent != null)
+					{
+						ViewHolder vh = (ViewHolder) parent.getData();
+						if (vh.type == ViewHolder.BLOCK)
+						{
+							ViewHolder newVH = new ViewHolder(null, card, ViewHolder.BLOCK);
+							TreeItem newItem = new TreeItem(parent, 0);
+							newItem.setText(card.getName());
+							newItem.setData(newVH);
+							controller.addCardToBlock(card, vh.block);
+						}
+					}
+				}
 			}
 
 			@Override
@@ -186,7 +204,7 @@ public class MainWindow extends ActivityStoreView
 					ViewHolder vh = (ViewHolder) selectedItem.getData();
 					if (vh.type == ViewHolder.BLOCK)
 					{
-						NewBlockInputDialog dlg = new NewBlockInputDialog(shell);
+						BlockInputDialog dlg = new BlockInputDialog(shell);
 						Block selectedBlock = vh.block;
 						String name = dlg.open(selectedBlock.getName());
 						selectedBlock.setName(name);
@@ -217,6 +235,13 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
+				TreeItem ti = tree.getSelection()[0];
+				if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
+				{
+					Card ret = new EditCardDialog(shell).open(((ViewHolder) ti.getData()).card);
+					if (ret != null)
+						controller.updateCard(ret);
+				}
 			}
 
 			@Override
@@ -249,7 +274,11 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-
+				TreeItem ti = tree.getSelection()[0];
+				if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
+				{
+					new CardPrintPreview(((ViewHolder) ti.getData()).card, shell).open();
+				}
 			}
 
 			@Override

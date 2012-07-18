@@ -12,12 +12,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class NewBlockInputDialog extends Dialog
+public class BlockInputDialog extends Dialog
 {
 	private String blockName;
 	private String input;
 
-	public NewBlockInputDialog(Shell arg0)
+	public BlockInputDialog(Shell arg0)
 	{
 		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 	}
@@ -72,7 +72,7 @@ public class NewBlockInputDialog extends Dialog
 		});
 
 		Button cancel = new Button(shell, SWT.PUSH);
-		cancel.setText("Cancel");
+		cancel.setText("Отмена");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
 		cancel.addSelectionListener(new SelectionAdapter()

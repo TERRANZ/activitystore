@@ -2,6 +2,8 @@ import org.junit.Test;
 
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
+import ru.terra.activitystore.db.entity.Card;
+import ru.terra.activitystore.db.entity.Cell;
 
 public class ControllerTest
 {
@@ -19,7 +21,14 @@ public class ControllerTest
 				Block level2 = controller.createBlock("level" + j, level1);
 				for (int k = 0; k <= 10; k++)
 				{
-					controller.createCard("card" + k, level2);
+					Card card = controller.createCard("card" + k, level2);
+					for (int c = 0; c <= 10; c++)
+					{
+						Cell cell = new Cell();
+						cell.setComment("cell " + String.valueOf(c));
+						cell.setCard(card);
+						controller.addCellToCard(cell, card);
+					}
 				}
 			}
 		}

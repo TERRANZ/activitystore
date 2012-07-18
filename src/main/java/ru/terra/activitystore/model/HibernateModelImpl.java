@@ -137,6 +137,7 @@ public class HibernateModelImpl extends ActivityStoreModel
 	public Block addCardToBlock(Card card, Block block)
 	{
 		card.setBlockId(block.getId());
+		cardpm.update(card);
 		return block;
 	}
 
