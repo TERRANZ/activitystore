@@ -40,7 +40,7 @@ public class EditCardDialog extends Dialog
 		shell.setText(getText());
 		this.card = card;
 		createContents(shell);
-		// shell.pack();
+		shell.pack();
 		shell.open();
 		Display display = getParent().getDisplay();
 		while (!shell.isDisposed())
