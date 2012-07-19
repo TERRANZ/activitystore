@@ -13,7 +13,7 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		ActivityStoreController controller = new ActivityStoreController();
+		ActivityStoreController controller = ActivityStoreController.getInstance();
 		controller.start();
 	}
 }

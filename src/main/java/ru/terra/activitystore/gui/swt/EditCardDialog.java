@@ -1,7 +1,7 @@
 package ru.terra.activitystore.gui.swt;
 
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
@@ -69,13 +68,8 @@ public class EditCardDialog extends Dialog
 		data.horizontalSpan = 2;
 		cardNameInput.setLayoutData(data);
 
-		cellsTable = new Table(shell,  SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
-		//cellsTable.setHeaderVisible(true);
+		cellsTable = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		cellsTable.setLinesVisible(true);
-//		TableColumn column = new TableColumn(cellsTable, SWT.NONE);
-//		column.setText("Ячейка");
-//		
-//		cellsTable.setHeaderVisible(true);
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		cellsTable.setLayoutData(data);
@@ -98,13 +92,16 @@ public class EditCardDialog extends Dialog
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				TableItem selected = cellsTable.getSelection()[0];
-				if (selected != null)
+				if (cellsTable.getSelection() != null && cellsTable.getSelection().length == 1)
 				{
-					Cell c = (Cell) selected.getData();
-					card.getCells().remove(c);
-					cellsTable.remove(cellsTable.getSelectionIndex());
-					cellsTable.setRedraw(true);
+					TableItem selected = cellsTable.getSelection()[0];
+					if (selected != null)
+					{
+						Cell c = (Cell) selected.getData();
+						card.getCells().remove(c);
+						cellsTable.remove(cellsTable.getSelectionIndex());
+						cellsTable.setRedraw(true);
+					}
 				}
 			}
 
@@ -122,7 +119,7 @@ public class EditCardDialog extends Dialog
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				Cell newCell = new EditCellDialog(shell).open(null);
+				Cell newCell = new SelectCellDialog(shell).open();
 				if (newCell != null)
 				{
 					card.getCells().add(newCell);

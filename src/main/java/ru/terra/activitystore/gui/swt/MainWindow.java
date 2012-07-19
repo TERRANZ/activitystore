@@ -162,7 +162,7 @@ public class MainWindow extends ActivityStoreView
 						ViewHolder vh = (ViewHolder) parent.getData();
 						if (vh.type == ViewHolder.BLOCK)
 						{
-							ViewHolder newVH = new ViewHolder(null, card, ViewHolder.BLOCK);
+							ViewHolder newVH = new ViewHolder(null, card, ViewHolder.CARD);
 							TreeItem newItem = new TreeItem(parent, 0);
 							newItem.setText(card.getName());
 							newItem.setData(newVH);

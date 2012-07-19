@@ -14,6 +14,7 @@ public class ActivityStoreController
 {
 	private ActivityStoreModel model;
 	private ActivityStoreView view;
+	private static ActivityStoreController instance = new ActivityStoreController();
 
 	public ActivityStoreController(ActivityStoreModel model, ActivityStoreView view)
 	{
@@ -28,7 +29,12 @@ public class ActivityStoreController
 		view.start();
 	}
 
-	public ActivityStoreController()
+	public static ActivityStoreController getInstance()
+	{
+		return instance;
+	}
+
+	private ActivityStoreController()
 	{
 		this.model = ActivityStoreModel.getDefaultImpl();
 		this.view = ActivityStoreView.getDefaultView(this);

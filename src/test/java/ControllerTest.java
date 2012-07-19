@@ -11,7 +11,7 @@ public class ControllerTest
 	@Test
 	public void CreateAndDeleteTest()
 	{
-		ActivityStoreController controller = new ActivityStoreController();
+		ActivityStoreController controller = ActivityStoreController.getInstance();
 		Block root = controller.getBlock(0);
 		for (int i = 0; i <= 10; i++)
 		{
