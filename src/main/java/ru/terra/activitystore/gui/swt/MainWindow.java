@@ -9,7 +9,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -17,19 +16,24 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
+import ru.terra.activitystore.constants.Constants;
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
+import ru.terra.activitystore.db.entity.Cell;
+import ru.terra.activitystore.util.RandomUtils;
 import ru.terra.activitystore.view.ActivityStoreView;
 
 public class MainWindow extends ActivityStoreView
 {
 	private Shell shell;
 	private Tree tree;
-	private Table CellViewer;
+	private Table CardViewer;
 	private Image blockImage, cardImage;
 	private Menu blockMenu, cardMenu;
 	private Display display;
@@ -75,7 +79,6 @@ public class MainWindow extends ActivityStoreView
 		gc.drawLine(7, 5, 14, 5);
 		gc.drawLine(7, 1, 7, 5);
 		gc.drawLine(1, 14, 14, 14);
-
 		gc.dispose();
 	}
 
@@ -86,9 +89,21 @@ public class MainWindow extends ActivityStoreView
 		prepareImages();
 		shell = new Shell(display);
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
+		shell.setText("Управление активностями");
 		fillMenu();
 		createTree();
-		CellViewer = new Table(shell, SWT.BORDER);
+		CardViewer = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		String[] titles = { "Ячейка", "Значение", "Тип"};
+		for (int i = 0; i < titles.length; i++)
+		{
+			TableColumn column = new TableColumn(CardViewer, SWT.NONE);
+			column.setText(titles[i]);
+		}
+		for (int i=0; i<titles.length; i++) {
+			CardViewer.getColumn (i).pack ();
+		}
+		CardViewer.setLinesVisible(true);
+		CardViewer.setHeaderVisible(true);
 		shell.open();
 		controller.onViewStarted();
 		while (!shell.isDisposed())
@@ -325,10 +340,13 @@ public class MainWindow extends ActivityStoreView
 						if (((ViewHolder) item.getData()).type == ViewHolder.BLOCK)
 						{
 							tree.setMenu(blockMenu);
+							CardViewer.clearAll();
+							CardViewer.removeAll();
 						}
 						else
 						{
 							tree.setMenu(cardMenu);
+							loadCard(((ViewHolder) item.getData()).card);
 						}
 					}
 					else
@@ -338,6 +356,23 @@ public class MainWindow extends ActivityStoreView
 				}
 			}
 		});
+	}
+
+	private void loadCard(Card card)
+	{
+		CardViewer.clearAll();
+		CardViewer.removeAll();
+		for (Cell c : card.getCells())
+		{
+			TableItem ti = new TableItem(CardViewer, SWT.NONE);
+			ti.setText(new String[] {
+					c.getComment(),
+					"",
+					(String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(),
+							c.getType()) });
+			ti.setData(c);
+		}
+
 	}
 
 	@Override
