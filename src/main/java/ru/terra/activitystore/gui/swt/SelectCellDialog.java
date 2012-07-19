@@ -26,7 +26,7 @@ public class SelectCellDialog extends Dialog
 
 	public SelectCellDialog(Shell parent)
 	{
-		super(parent);
+		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 	}
 
 	public Cell open()

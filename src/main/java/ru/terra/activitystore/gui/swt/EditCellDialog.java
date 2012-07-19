@@ -28,7 +28,7 @@ public class EditCellDialog extends Dialog
 
 	public EditCellDialog(Shell arg0)
 	{
-		super(arg0);
+		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 	}
 
 	public Cell open(Cell cell)

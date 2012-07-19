@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
@@ -28,9 +29,10 @@ public class MainWindow extends ActivityStoreView
 {
 	private Shell shell;
 	private Tree tree;
-	private Composite formWrapper;
-	private Image blockImage;
+	private Table CellViewer;
+	private Image blockImage, cardImage;
 	private Menu blockMenu, cardMenu;
+	private Display display;
 
 	private class ViewHolder
 	{
@@ -54,22 +56,39 @@ public class MainWindow extends ActivityStoreView
 		super(controller);
 	}
 
-	@Override
-	public void start()
+	private void prepareImages()
 	{
-		Display display = new Display();
 		blockImage = new Image(display, 16, 16);
 		GC gc = new GC(blockImage);
 		gc.setForeground(display.getSystemColor(SWT.COLOR_RED));
-		gc.drawLine(1, 1, 14, 14);
-		gc.drawLine(1, 14, 14, 1);
-		gc.drawOval(2, 2, 11, 11);
+		gc.drawLine(1, 1, 1, 14);
+		gc.drawLine(1, 1, 14, 1);
+		gc.drawLine(1, 14, 14, 14);
+		gc.drawLine(14, 14, 14, 1);
 		gc.dispose();
+		cardImage = new Image(display, 16, 16);
+		gc = new GC(cardImage);
+		gc.setForeground(display.getSystemColor(SWT.COLOR_RED));
+		gc.drawLine(1, 1, 1, 14);
+		gc.drawLine(1, 1, 7, 1);
+		gc.drawLine(14, 5, 14, 14);
+		gc.drawLine(7, 5, 14, 5);
+		gc.drawLine(7, 1, 7, 5);
+		gc.drawLine(1, 14, 14, 14);
+
+		gc.dispose();
+	}
+
+	@Override
+	public void start()
+	{
+		display = new Display();
+		prepareImages();
 		shell = new Shell(display);
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		fillMenu();
 		createTree();
-		formWrapper = new Composite(shell, SWT.NONE);
+		CellViewer = new Table(shell, SWT.BORDER);
 		shell.open();
 		controller.onViewStarted();
 		while (!shell.isDisposed())
@@ -166,6 +185,7 @@ public class MainWindow extends ActivityStoreView
 							TreeItem newItem = new TreeItem(parent, 0);
 							newItem.setText(card.getName());
 							newItem.setData(newVH);
+							newItem.setImage(cardImage);
 							controller.addCardToBlock(card, vh.block);
 						}
 					}
@@ -349,6 +369,7 @@ public class MainWindow extends ActivityStoreView
 					TreeItem cardItem = new TreeItem(newItem, 0);
 					cardItem.setData(new ViewHolder(null, c, ViewHolder.CARD));
 					cardItem.setText(c.getName());
+					cardItem.setImage(cardImage);
 				}
 			}
 			blockMap.put(b.getId(), newItem);
