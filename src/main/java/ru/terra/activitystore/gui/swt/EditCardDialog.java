@@ -1,7 +1,7 @@
 package ru.terra.activitystore.gui.swt;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -69,13 +69,13 @@ public class EditCardDialog extends Dialog
 		data.horizontalSpan = 2;
 		cardNameInput.setLayoutData(data);
 
-		cellsTable = new Table(shell, SWT.BORDER);
-		cellsTable.setHeaderVisible(true);
+		cellsTable = new Table(shell,  SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		//cellsTable.setHeaderVisible(true);
 		cellsTable.setLinesVisible(true);
-		TableColumn[] column = new TableColumn[1];
-		column[0] = new TableColumn(cellsTable, SWT.LEFT);
-		column[0].setText("Ячейка");
-		cellsTable.setHeaderVisible(true);
+//		TableColumn column = new TableColumn(cellsTable, SWT.NONE);
+//		column.setText("Ячейка");
+//		
+//		cellsTable.setHeaderVisible(true);
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		cellsTable.setLayoutData(data);

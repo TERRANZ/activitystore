@@ -1,111 +1,134 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>ru.terra</groupId>
-	<artifactId>activitystore</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>activitystore</name>
+
+	<modelVersion>
+		4.0.0
+    </modelVersion>
+	<groupId>
+		ru.terra
+    </groupId>
+	<artifactId>
+		activitystore
+    </artifactId>
+	<version>
+		0.0.1-SNAPSHOT
+    </version>
+	<name>
+		activitystore
+    </name>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<swt.version>3.7</swt.version>
+		<project.build.sourceEncoding>
+			UTF-8
+		</project.build.sourceEncoding>
 	</properties>
-	<profiles>
-		<profile>
-			<id>mac</id>
-			<activation>
-				<os>
-					<name>mac os x</name>
-				</os>
-			</activation>
-			<properties>
-				<swt.groupId>org.eclipse.swt.carbon</swt.groupId>
-				<swt.artifactId>macosx</swt.artifactId>
-			</properties>
-		</profile>
-		<profile>
-			<id>windows</id>
-			<activation>
-				<os>
-					<family>windows</family>
-				</os>
-			</activation>
-			<properties>
-				<swt.groupId>org.eclipse.swt.win32.win32</swt.groupId>
-				<swt.artifactId>x86</swt.artifactId>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux</id>
-			<activation>
-				<os>
-					<family>linux</family>
-				</os>
-			</activation>
-			<properties>
-				<swt.groupId>org.eclipse.swt.gtk.linux</swt.groupId>
-				<swt.artifactId>x86_64</swt.artifactId>
-			</properties>
-		</profile>
-	</profiles>
-
 	<dependencies>
-
-
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<scope>test</scope>
+			<groupId>
+				junit
+            </groupId>
+			<artifactId>
+				junit
+            </artifactId>
+			<version>
+				4.7
+            </version>
+			<scope>
+				test	
+            </scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>4.1.4.Final</version>
+			<groupId>
+				org.hibernate
+            </groupId>
+			<artifactId>
+				hibernate-core
+            </artifactId>
+			<version>
+				4.1.4.Final
+            </version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>4.1.4.Final</version>
+			<groupId>
+				org.hibernate
+            </groupId>
+			<artifactId>
+				hibernate-core
+            </artifactId>
+			<version>
+				4.1.4.Final
+            </version>
 		</dependency>
+
 		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.0.Final</version>
+			<groupId>
+				org.hibernate.javax.persistence
+            </groupId>
+			<artifactId>
+				hibernate-jpa-2.0-api
+            </artifactId>
+			<version>
+				1.0.0.Final
+            </version>
 			<classifier />
 		</dependency>
 
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>5.0.0.Alpha1</version>
+			<groupId>
+				org.hibernate
+            </groupId>
+			<artifactId>
+				hibernate-validator
+            </artifactId>
+			<version>
+				5.0.0.Alpha1
+            </version>
 		</dependency>
-
 		<dependency>
-			<groupId>${swt.groupId}</groupId>
-			<artifactId>${swt.artifactId}</artifactId>
-			<version>${swt.version}</version>
+			<groupId>org.eclipse.swt</groupId>
+			<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
+			<version>3.7.2</version>
 		</dependency>
-
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.20</version>
+			<groupId>
+				mysql
+            </groupId>
+			<artifactId>
+				mysql-connector-java
+            </artifactId>
+			<version>
+				5.1.20
+            </version>
 		</dependency>
-
 	</dependencies>
-
-
+	<repositories>
+		<repository>
+			<id>swt-repo</id>
+			<url>https://swt-repo.googlecode.com/svn/repo/</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
+				<groupId>
+					org.apache.maven.plugins
+                </groupId>
+				<artifactId>
+					maven-compiler-plugin
+                </artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<debug>true</debug>
+					<source>
+						1.6
+					</source>
+					<target>
+						1.6
+					</target>
+					<debug>
+						true
+					</debug>
 				</configuration>
 			</plugin>
 		</plugins>
