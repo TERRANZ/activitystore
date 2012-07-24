@@ -1,5 +1,5 @@
 /*
-SQLyog Ultimate v9.50 
+SQLyog Enterprise - MySQL GUI v8.14 
 MySQL - 5.1.62-1-log : Database - activitystore
 *********************************************************************
 */
@@ -50,6 +50,21 @@ CREATE TABLE `card` (
 
 /*Data for the table `card` */
 
+/*Table structure for table `card_cell` */
+
+DROP TABLE IF EXISTS `card_cell`;
+
+CREATE TABLE `card_cell` (
+  `card_id` int(10) unsigned NOT NULL,
+  `cell_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`card_id`,`cell_id`),
+  KEY `FK_card_cell_to_cell` (`cell_id`),
+  CONSTRAINT `FK_card_cell_to_card` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`),
+  CONSTRAINT `FK_card_cell_to_cell` FOREIGN KEY (`cell_id`) REFERENCES `cell` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+
+/*Data for the table `card_cell` */
+
 /*Table structure for table `cell` */
 
 DROP TABLE IF EXISTS `cell`;
@@ -60,13 +75,10 @@ CREATE TABLE `cell` (
   `list_id` int(10) unsigned DEFAULT NULL,
   `val` varchar(512) DEFAULT NULL,
   `comment` varchar(200) DEFAULT NULL,
-  `card_id` int(11) unsigned NOT NULL,
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `update_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `cell_to_card_fk` (`card_id`),
   KEY `cell_to_list_fk` (`list_id`),
-  CONSTRAINT `cell_to_card_fk` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`),
   CONSTRAINT `cell_to_list_fk` FOREIGN KEY (`list_id`) REFERENCES `vlist` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
