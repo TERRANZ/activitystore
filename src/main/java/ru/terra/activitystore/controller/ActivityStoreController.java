@@ -60,7 +60,7 @@ public class ActivityStoreController
 		return model.getAllCells();
 	}
 
-	public List<Template> getTemplates()
+	public List<Template> getAllTemplates()
 	{
 		return model.getTemplates();
 	}
