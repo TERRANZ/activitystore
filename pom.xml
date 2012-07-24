@@ -87,7 +87,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.swt</groupId>
-            <artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
+            <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
             <version>3.7.2</version>
         </dependency>
         <dependency>

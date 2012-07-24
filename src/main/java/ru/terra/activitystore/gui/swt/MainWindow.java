@@ -93,14 +93,15 @@ public class MainWindow extends ActivityStoreView
 		fillMenu();
 		createTree();
 		CardViewer = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
-		String[] titles = { "Ячейка", "Значение", "Тип"};
+		String[] titles = { "Ячейка", "Значение", "Тип" };
 		for (int i = 0; i < titles.length; i++)
 		{
 			TableColumn column = new TableColumn(CardViewer, SWT.NONE);
 			column.setText(titles[i]);
 		}
-		for (int i=0; i<titles.length; i++) {
-			CardViewer.getColumn (i).pack ();
+		for (int i = 0; i < titles.length; i++)
+		{
+			CardViewer.getColumn(i).pack();
 		}
 		CardViewer.setLinesVisible(true);
 		CardViewer.setHeaderVisible(true);
@@ -146,6 +147,8 @@ public class MainWindow extends ActivityStoreView
 		deleteMenuItem.setText("Удалить");
 		MenuItem editBlockName = new MenuItem(blockMenu, SWT.PUSH);
 		editBlockName.setText("Редактировать");
+		MenuItem printBlock = new MenuItem(blockMenu, SWT.PUSH);
+		printBlock.setText("Отчёт по блоку");
 		createBlockMenuItem.addSelectionListener(new SelectionListener()
 		{
 			@Override
@@ -233,20 +236,26 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				TreeItem selectedItem = tree.getSelection()[0];
-				if (selectedItem != null)
+				if (tree.getSelection() != null && tree.getSelection().length == 1)
 				{
-					ViewHolder vh = (ViewHolder) selectedItem.getData();
-					if (vh.type == ViewHolder.BLOCK)
+					TreeItem selectedItem = tree.getSelection()[0];
+					if (selectedItem != null)
 					{
-						BlockInputDialog dlg = new BlockInputDialog(shell);
-						Block selectedBlock = vh.block;
-						String name = dlg.open(selectedBlock.getName());
-						selectedBlock.setName(name);
-						controller.updateBlock(selectedBlock);
-						vh.block = selectedBlock;
-						selectedItem.setData(vh);
-						selectedItem.setText(name);
+						ViewHolder vh = (ViewHolder) selectedItem.getData();
+						if (vh.type == ViewHolder.BLOCK)
+						{
+							BlockInputDialog dlg = new BlockInputDialog(shell);
+							Block selectedBlock = vh.block;
+							String name = dlg.open(selectedBlock.getName());
+							if (name != null)
+							{
+								selectedBlock.setName(name);
+								controller.updateBlock(selectedBlock);
+								vh.block = selectedBlock;
+								selectedItem.setData(vh);
+								selectedItem.setText(name);
+							}
+						}
 					}
 				}
 			}
@@ -256,6 +265,35 @@ public class MainWindow extends ActivityStoreView
 			{
 
 			}
+		});
+
+		printBlock.addSelectionListener(new SelectionListener()
+		{
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+				if (tree.getSelection() != null && tree.getSelection().length == 1)
+				{
+					TreeItem selectedBlock = tree.getSelection()[0];
+					if (selectedBlock != null)
+					{
+						ViewHolder vh = (ViewHolder) selectedBlock.getData();
+						if (vh.type == ViewHolder.BLOCK)
+						{
+							Block block = vh.block;
+							PrintPreview dlg = new PrintPreview(block, shell);
+							dlg.open();
+						}
+					}
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0)
+			{
+			}
+
 		});
 	}
 
@@ -312,7 +350,7 @@ public class MainWindow extends ActivityStoreView
 				TreeItem ti = tree.getSelection()[0];
 				if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
 				{
-					new CardPrintPreview(((ViewHolder) ti.getData()).card, shell).open();
+					new PrintPreview(((ViewHolder) ti.getData()).card, shell).open();
 				}
 			}
 
@@ -365,11 +403,7 @@ public class MainWindow extends ActivityStoreView
 		for (Cell c : card.getCells())
 		{
 			TableItem ti = new TableItem(CardViewer, SWT.NONE);
-			ti.setText(new String[] {
-					c.getComment(),
-					"",
-					(String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(),
-							c.getType()) });
+			ti.setText(new String[] { c.getComment(), "", (String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });
 			ti.setData(c);
 		}
 
