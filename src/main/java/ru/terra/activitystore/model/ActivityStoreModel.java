@@ -22,6 +22,8 @@ public abstract class ActivityStoreModel
 
 	public abstract List<Card> getCards(Block block);
 
+	public abstract List<Card> getAllCards();
+
 	public abstract List<Cell> getCells(Card card);
 
 	public abstract List<Cell> getAllCells();

@@ -189,4 +189,10 @@ public class HibernateModelImpl extends ActivityStoreModel
 		cardpm.update(card);
 	}
 
+	@Override
+	public List<Card> getAllCards()
+	{
+		return cardpm.findAll(Card.class);
+	}
+
 }

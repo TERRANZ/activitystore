@@ -50,6 +50,11 @@ public class ActivityStoreController
 		return model.getCards(block);
 	}
 
+	public List<Card> getAllCards()
+	{
+		return model.getAllCards();
+	}
+
 	public List<Cell> getCells(Card card)
 	{
 		return model.getCells(card);
