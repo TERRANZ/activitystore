@@ -9,7 +9,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
@@ -20,7 +19,7 @@ import ru.terra.activitystore.constants.Constants;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.util.RandomUtils;
 
-public class EditCellDialog extends Dialog
+public class EditCellDialog extends AbstractEditDialog<Cell>
 {
 	private String cellName;
 	private String name;
@@ -28,9 +27,10 @@ public class EditCellDialog extends Dialog
 
 	public EditCellDialog(Shell arg0)
 	{
-		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		super(arg0);
 	}
 
+	@Override
 	public Cell open(Cell cell)
 	{
 		Shell shell = new Shell(getParent(), getStyle());
@@ -119,5 +119,11 @@ public class EditCellDialog extends Dialog
 		});
 
 		shell.setDefaultButton(ok);
+	}
+
+	@Override
+	public Cell open()
+	{
+		return open(null);
 	}
 }

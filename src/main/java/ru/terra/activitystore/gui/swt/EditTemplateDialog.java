@@ -1,11 +1,10 @@
 package ru.terra.activitystore.gui.swt;
 
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Shell;
 
 import ru.terra.activitystore.db.entity.Template;
 
-public class EditTemplateDialog extends Dialog
+public class EditTemplateDialog extends AbstractEditDialog<Template>
 {
 	private Template ret;
 
@@ -17,5 +16,11 @@ public class EditTemplateDialog extends Dialog
 	public Template open()
 	{
 		return ret;
+	}
+
+	@Override
+	public Template open(Template parent)
+	{
+		return null;
 	}
 }

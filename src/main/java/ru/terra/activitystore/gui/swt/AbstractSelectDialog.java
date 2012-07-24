@@ -13,21 +13,32 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-import ru.terra.activitystore.controller.ActivityStoreController;
-import ru.terra.activitystore.db.entity.Template;
-
 public abstract class AbstractSelectDialog<T> extends Dialog
 {
 
 	protected T ret;
 	protected String newButtonText, selectText;
 	private Table table;
+	private AbstractEditDialog<T> editDialog;
+	private Shell shell;
 
-	public AbstractSelectDialog(Shell arg0, String newButtonText, String selectText, AbstractEditDialog editDialog)
+	public AbstractSelectDialog(Shell arg0, String newButtonText, String selectText, AbstractEditDialog<T> editDialog)
 	{
 		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		this.newButtonText = newButtonText;
 		this.selectText = selectText;
+		this.editDialog = editDialog;
+		this.shell = arg0;
+	}
+
+	protected Shell getShell()
+	{
+		return shell;
+	}
+
+	protected Table getTable()
+	{
+		return table;
 	}
 
 	public T open()
@@ -64,16 +75,16 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 		{
 			public void widgetSelected(SelectionEvent event)
 			{
-				ret = new EditTemplateDialog(shell).open();
+				ret = editDialog.open();
 				shell.close();
 			}
 		});
 
-		templatesTable = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
-		templatesTable.setLinesVisible(true);
+		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table.setLinesVisible(true);
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
-		templatesTable.setLayoutData(data);
+		table.setLayoutData(data);
 		loadCells();
 		Button ok = new Button(shell, SWT.PUSH);
 		ok.setText("OK");
@@ -83,12 +94,12 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 		{
 			public void widgetSelected(SelectionEvent event)
 			{
-				if (templatesTable.getSelection() != null && templatesTable.getSelection().length == 1)
+				if (table.getSelection() != null && table.getSelection().length == 1)
 				{
-					TableItem ti = templatesTable.getSelection()[0];
+					TableItem ti = table.getSelection()[0];
 					if (ti != null)
 					{
-						ret = (Template) ti.getData();
+						ret = (T) ti.getData();
 						shell.close();
 					}
 				}
@@ -111,14 +122,5 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 		shell.setDefaultButton(ok);
 	}
 
-	protected void loadCells()
-	{
-		templatesTable.clearAll();
-		for (Template t : ActivityStoreController.getInstance().getAllTemplates())
-		{
-			TableItem ti = new TableItem(templatesTable, SWT.NONE);
-			ti.setText(new String[] { t.getName(), t.getCreationDate().toString() });
-			ti.setData(t);
-		}
-	}
+	protected abstract void loadCells();
 }

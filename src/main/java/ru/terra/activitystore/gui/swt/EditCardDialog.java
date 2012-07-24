@@ -7,7 +7,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -20,7 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 
-public class EditCardDialog extends Dialog
+public class EditCardDialog extends AbstractEditDialog<Card>
 {
 	private String cardName;
 	private String name;
@@ -30,9 +29,10 @@ public class EditCardDialog extends Dialog
 
 	public EditCardDialog(Shell arg0)
 	{
-		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		super(arg0);
 	}
 
+	@Override
 	public Card open(Card card)
 	{
 		Shell shell = new Shell(getParent(), getStyle());
@@ -183,5 +183,11 @@ public class EditCardDialog extends Dialog
 			System.out.println("Loading cell to table " + c.getComment());
 		}
 		cellsTable.setRedraw(true);
+	}
+
+	@Override
+	public Card open()
+	{
+		return open(null);
 	}
 }
