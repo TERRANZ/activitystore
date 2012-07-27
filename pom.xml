@@ -1,135 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>
         ru.terra
     </groupId>
-    <artifactId>
+	<artifactId>
         activitystore
     </artifactId>
-    <version>
+	<version>
         0.0.1-SNAPSHOT
     </version>
-    <name>
+	<name>
         activitystore
     </name>
 
-    <properties>
-        <project.build.sourceEncoding>
-            UTF-8
-        </project.build.sourceEncoding>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>
+	<properties>
+		<project.build.sourceEncoding>
+			UTF-8
+		</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>
                 junit
             </groupId>
-            <artifactId>
+			<artifactId>
                 junit
             </artifactId>
-            <version>
+			<version>
                 4.7
             </version>
-            <scope>
+			<scope>
                 test	
             </scope>
-        </dependency>
+		</dependency>
 
-        <dependency>
-            <groupId>
-                org.hibernate
-            </groupId>
-            <artifactId>
-                hibernate-core
-            </artifactId>
-            <version>
-                4.1.4.Final
-            </version>
-        </dependency>
-        <dependency>
-            <groupId>
-                org.hibernate
-            </groupId>
-            <artifactId>
-                hibernate-core
-            </artifactId>
-            <version>
-                4.1.4.Final
-            </version>
-        </dependency>
 
-        <dependency>
-            <groupId>
-                org.hibernate.javax.persistence
-            </groupId>
-            <artifactId>
-                hibernate-jpa-2.0-api
-            </artifactId>
-            <version>
-                1.0.0.Final
-            </version>
-            <classifier />
-        </dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.4.0</version>
+			<scope>compile</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>
-                org.hibernate
-            </groupId>
-            <artifactId>
-                hibernate-validator
-            </artifactId>
-            <version>
-                5.0.0.Alpha1
-            </version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.swt</groupId>
-            <artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
-            <version>3.7.2</version>
-        </dependency>
-        <dependency>
-            <groupId>
+		<dependency>
+			<groupId>org.eclipse.swt</groupId>
+			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+			<version>3.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>
                 mysql
             </groupId>
-            <artifactId>
+			<artifactId>
                 mysql-connector-java
             </artifactId>
-            <version>
+			<version>
                 5.1.20
             </version>
-        </dependency>
-    </dependencies>
-    <repositories>
-        <repository>
-            <id>swt-repo</id>
-            <url>https://swt-repo.googlecode.com/svn/repo/</url>
-        </repository>
-    </repositories>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>swt-repo</id>
+			<url>https://swt-repo.googlecode.com/svn/repo/</url>
+		</repository>
+		 <repository>
+     <id>EclipseLink Repo</id>
+     <url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
+     
+     <snapshots>
+        <enabled>true</enabled>
+     </snapshots> 
+  </repository>    
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>
                     org.apache.maven.plugins
                 </groupId>
-                <artifactId>
+				<artifactId>
                     maven-compiler-plugin
                 </artifactId>
-                <configuration>
-                    <source>
-                        1.6
-                    </source>
-                    <target>
-                        1.6
-                    </target>
-                    <debug>
-                        true
-                    </debug>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+				<configuration>
+					<source>
+						1.6
+					</source>
+					<target>
+						1.6
+					</target>
+					<debug>
+						true
+					</debug>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

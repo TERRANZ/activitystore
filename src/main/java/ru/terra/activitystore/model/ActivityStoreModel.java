@@ -11,7 +11,7 @@ public abstract class ActivityStoreModel
 {
 	public static ActivityStoreModel getDefaultImpl()
 	{
-		return new HibernateModelImpl();
+		return new JpaModelImpl();
 	}
 
 	public abstract void start();

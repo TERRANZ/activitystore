@@ -400,7 +400,7 @@ public class MainWindow extends ActivityStoreView
 	{
 		CardViewer.clearAll();
 		CardViewer.removeAll();
-		for (Cell c : card.getCells())
+		for (Cell c : controller.getCells(card))
 		{
 			TableItem ti = new TableItem(CardViewer, SWT.NONE);
 			ti.setText(new String[] { c.getComment(), "", (String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });

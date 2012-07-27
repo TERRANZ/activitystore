@@ -24,9 +24,8 @@ public class ControllerTest
 					Card card = controller.createCard("card" + k, level2);
 					for (int c = 0; c <= 10; c++)
 					{
-						Cell cell = new Cell();
+						Cell cell = new Cell(c);
 						cell.setComment("cell " + String.valueOf(c));
-						cell.setCard(card);
 						controller.addCellToCard(cell, card);
 					}
 				}

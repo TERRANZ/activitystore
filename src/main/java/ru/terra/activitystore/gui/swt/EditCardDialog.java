@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 
@@ -98,7 +99,7 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 					if (selected != null)
 					{
 						Cell c = (Cell) selected.getData();
-						card.getCells().remove(c);
+						ActivityStoreController.getInstance().deleteCellFromCard(c, card);
 						cellsTable.remove(cellsTable.getSelectionIndex());
 						cellsTable.setRedraw(true);
 					}
@@ -122,9 +123,9 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 				Cell newCell = new SelectCellDialog(shell).open();
 				if (newCell != null)
 				{
-					card.getCells().add(newCell);
+					ActivityStoreController.getInstance().addCellToCard(newCell, card);
+					newCell.getCardList().add(card);
 					TableItem newItem = new TableItem(cellsTable, SWT.NONE);
-					newCell.setCard(card);
 					newItem.setText(0, newCell.getComment());
 					newItem.setData(newCell);
 				}
@@ -175,7 +176,7 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 	{
 		cardNameInput.setText(card.getName());
 		cellsTable.setRedraw(false);
-		for (Cell c : card.getCells())
+		for (Cell c : ActivityStoreController.getInstance().getCells(card))
 		{
 			TableItem ti = new TableItem(cellsTable, SWT.NONE);
 			ti.setText(0, c.getComment());
