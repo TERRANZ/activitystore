@@ -26,6 +26,8 @@ import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
+import ru.terra.activitystore.gui.swt.print.BlockPrint;
+import ru.terra.activitystore.gui.swt.print.CardPrint;
 import ru.terra.activitystore.util.RandomUtils;
 import ru.terra.activitystore.view.ActivityStoreView;
 
@@ -282,8 +284,7 @@ public class MainWindow extends ActivityStoreView
 						if (vh.type == ViewHolder.BLOCK)
 						{
 							Block block = vh.block;
-							PrintPreview dlg = new PrintPreview(block, shell);
-							dlg.open();
+							new BlockPrint(block, shell, 0).open();
 						}
 					}
 				}
@@ -350,7 +351,7 @@ public class MainWindow extends ActivityStoreView
 				TreeItem ti = tree.getSelection()[0];
 				if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
 				{
-					new PrintPreview(((ViewHolder) ti.getData()).card, shell).open();
+					new CardPrint(((ViewHolder) ti.getData()).card, shell, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL).open();
 				}
 			}
 
