@@ -53,9 +53,9 @@ public class Card implements Serializable
     {
         @JoinColumn(name = "cell_id", referencedColumnName = "id", nullable = false)
     })
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Cell> cellList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "card", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "card", fetch = FetchType.LAZY)
     private List<Template> templateList;
 
     public Card()

@@ -57,4 +57,12 @@ public abstract class ActivityStoreModel
 	public abstract void updateBlock(Block block);
 
 	public abstract void updateCard(Card card);
+
+	public abstract Card saveCard(Card card);
+
+	public abstract Cell saveCell(Cell cell);
+	
+	public abstract Block saveBlock(Block block);
+
+	public abstract void updateCell(Cell cell);
 }

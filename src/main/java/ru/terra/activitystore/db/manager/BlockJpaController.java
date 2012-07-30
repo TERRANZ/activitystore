@@ -144,15 +144,8 @@ public class BlockJpaController implements Serializable
 		EntityManager em = getEntityManager();
 		try
 		{
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery cq = cb.createQuery();
-			cq.select(cq.from(Block.class));
-			ParameterExpression<Integer> p = cb.parameter(Integer.class);
-			Root<Block> c = cq.from(Block.class);
-			cq.where(cb.equal(c.get("parent"), p));
-			TypedQuery<Block> q = em.createQuery(cq);
-			q.setParameter(p, root.getId());
-			return q.getResultList();
+			Query blocks = em.createNamedQuery("Block.findByParent").setParameter("parent", root.getId());
+			return blocks.getResultList();
 		} finally
 		{
 			em.close();

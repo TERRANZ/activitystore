@@ -151,6 +151,24 @@ public class JpaModelImpl extends ActivityStoreModel
 	@Override
 	public Card addCellToCard(Cell cell, Card card)
 	{
+		if (cell.getId() == null)
+		{
+			cell = saveCell(cell);
+			cell.getCardList().add(card);
+			try
+			{
+				cellc.edit(cell);
+			} catch (NonexistentEntityException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		card.getCellList().add(cell);
 		try
 		{
@@ -198,6 +216,8 @@ public class JpaModelImpl extends ActivityStoreModel
 	public Block addCardToBlock(Card card, Block block)
 	{
 		card.setBlockId(block.getId());
+		if (card.getId() == null)
+			card = saveCard(card);
 		try
 		{
 			cardc.edit(card);
@@ -233,6 +253,8 @@ public class JpaModelImpl extends ActivityStoreModel
 	public Boolean addBlockToBlock(Block newBlock, Block parent)
 	{
 		newBlock.setParent(parent.getId());
+		if (newBlock.getId() == null)
+			newBlock = saveBlock(newBlock);
 		try
 		{
 			bc.edit(newBlock);
@@ -277,6 +299,44 @@ public class JpaModelImpl extends ActivityStoreModel
 			e.printStackTrace();
 		} catch (Exception e)
 		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Card saveCard(Card card)
+	{
+		cardc.create(card);
+		return card;
+	}
+
+	@Override
+	public Cell saveCell(Cell cell)
+	{
+		cellc.create(cell);
+		return cell;
+	}
+
+	@Override
+	public Block saveBlock(Block block)
+	{
+		bc.create(block);
+		return block;
+	}
+
+	@Override
+	public void updateCell(Cell cell)
+	{
+		try
+		{
+			cellc.edit(cell);
+		} catch (NonexistentEntityException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

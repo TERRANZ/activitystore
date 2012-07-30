@@ -46,10 +46,10 @@ public class Cell implements Serializable
     @Column(name = "update_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
-    @ManyToMany(mappedBy = "cellList", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "cellList", fetch = FetchType.LAZY)
     private List<Card> cardList;
     @JoinColumn(name = "list_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Vlist listId;
 
     public Cell()

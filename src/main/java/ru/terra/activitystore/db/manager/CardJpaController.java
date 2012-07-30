@@ -256,15 +256,8 @@ public class CardJpaController implements Serializable
 		EntityManager em = getEntityManager();
 		try
 		{
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery cq = cb.createQuery();
-			cq.select(cq.from(Card.class));
-			ParameterExpression<Integer> p = cb.parameter(Integer.class);
-			Root<Card> c = cq.from(Card.class);
-			cq.where(cb.equal(c.get("block_id"), p));
-			TypedQuery<Card> q = em.createQuery(cq);
-			q.setParameter(p, block.getId());
-			return q.getResultList();
+			Query cards = em.createNamedQuery("Card.findByBlockId").setParameter("blockId", block.getId());
+			return cards.getResultList();
 		} finally
 		{
 			em.close();
@@ -281,7 +274,7 @@ public class CardJpaController implements Serializable
 			cq.select(cq.from(Card.class));
 			ParameterExpression<Integer> p = cb.parameter(Integer.class);
 			Root<Card> c = cq.from(Card.class);
-			cq.where(cb.equal(c.get("template_id"), p));
+			cq.where(cb.equal(c.get("templateId"), p));
 			TypedQuery<Card> q = em.createQuery(cq);
 			q.setParameter(p, block.getId());
 			return q.getResultList();

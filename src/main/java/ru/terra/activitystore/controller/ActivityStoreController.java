@@ -146,4 +146,31 @@ public class ActivityStoreController
 		card.setUpdateDate(new Date());
 		model.updateCard(card);
 	}
+
+	public Card saveNewCard(Card card)
+	{
+		return model.saveCard(card);
+	}
+
+	public Cell saveNewCell(Cell cell)
+	{
+		return model.saveCell(cell);
+	}
+
+	public Block saveNewBlock(Block block)
+	{
+		return model.saveBlock(block);
+	}
+
+	public Cell createCell(String name)
+	{
+		Cell ret = new Cell();
+		ret.setComment(name);
+		return model.saveCell(ret);
+	}
+
+	public void updateCell(Cell cell)
+	{
+		model.updateCell(cell);
+	}
 }
