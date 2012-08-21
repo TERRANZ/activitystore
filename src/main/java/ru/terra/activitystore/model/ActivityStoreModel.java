@@ -65,4 +65,6 @@ public abstract class ActivityStoreModel
 	public abstract Block saveBlock(Block block);
 
 	public abstract void updateCell(Cell cell);
+
+	public abstract Card createCard(String name);
 }

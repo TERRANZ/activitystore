@@ -81,7 +81,7 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 		}
 		else
 		{
-			card = new Card();
+			card = ActivityStoreController.getInstance().createCard("");
 		}
 
 		Menu cellsMenu = new Menu(cellsTable);

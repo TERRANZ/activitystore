@@ -371,7 +371,7 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void handleEvent(Event arg0)
 			{
-				if (tree.getSelection() != null)
+				if (tree.getSelection() != null && tree.getSelection().length > 0)
 				{
 					TreeItem item = tree.getSelection()[0];
 					if (item != null)

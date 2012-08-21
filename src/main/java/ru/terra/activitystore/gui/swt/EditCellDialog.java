@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import ru.terra.activitystore.constants.Constants;
+import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.util.RandomUtils;
 
@@ -91,8 +92,7 @@ public class EditCellDialog extends AbstractEditDialog<Cell>
 				String cellType = combo.getText();
 				if (cellType != null && cellType != "" && cellName != "")
 				{
-					ret = new Cell();
-					ret.setComment(cellName);
+					ret = ActivityStoreController.getInstance().createCell(cellName);
 					shell.close();
 				}
 				else

@@ -85,6 +85,11 @@ public class ActivityStoreController
 		return model.deleteBlock(block, recursive);
 	}
 
+	public Card createCard(String name)
+	{
+		return model.createCard(name);
+	}
+
 	public Card createCard(String name, Block parent)
 	{
 		return model.createCard(name, parent);

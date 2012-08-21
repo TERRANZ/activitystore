@@ -115,7 +115,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	{
 		Card newCard = new Card();
 		newCard.setName(name);
-		newCard.setBlockId(parent.getId());
+		newCard.setBlockId(parent != null ? parent.getId() : null);
 		cardc.create(newCard);
 		return newCard;
 	}
@@ -125,7 +125,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	{
 		Card newCard = new Card();
 		newCard.setName(name);
-		newCard.setTemplateId(parent.getId());
+		newCard.setTemplateId(parent != null ? parent.getId() : null);
 		cardc.create(newCard);
 		return newCard;
 	}
@@ -339,5 +339,14 @@ public class JpaModelImpl extends ActivityStoreModel
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Card createCard(String name)
+	{
+		Card newCard = new Card();
+		newCard.setName(name);
+		cardc.create(newCard);
+		return newCard;
 	}
 }
