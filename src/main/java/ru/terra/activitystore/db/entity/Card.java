@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ru.terra.activitystore.db.entity;
 
 import java.io.Serializable;
@@ -53,9 +57,9 @@ public class Card implements Serializable
     {
         @JoinColumn(name = "cell_id", referencedColumnName = "id", nullable = false)
     })
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     private List<Cell> cellList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "card", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "card")
     private List<Template> templateList;
 
     public Card()

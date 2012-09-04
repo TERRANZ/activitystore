@@ -8,6 +8,7 @@
     <class>ru.terra.activitystore.db.entity.Template</class>
     <class>ru.terra.activitystore.db.entity.Cell</class>
     <class>ru.terra.activitystore.db.entity.ListVal</class>
+    <class>ru.terra.activitystore.db.entity.CardCellVal</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/activitystore"/>
       <property name="javax.persistence.jdbc.password" value="as"/>

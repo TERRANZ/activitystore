@@ -61,10 +61,14 @@ public abstract class ActivityStoreModel
 	public abstract Card saveCard(Card card);
 
 	public abstract Cell saveCell(Cell cell);
-	
+
 	public abstract Block saveBlock(Block block);
 
 	public abstract void updateCell(Cell cell);
 
 	public abstract Card createCard(String name);
+
+	public abstract String getCellValue(Integer cardId, Integer cellId);
+
+	public abstract void setCellValue(Integer cardId, Integer cellId, String val);
 }

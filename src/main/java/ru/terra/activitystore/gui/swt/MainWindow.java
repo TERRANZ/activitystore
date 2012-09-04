@@ -404,7 +404,7 @@ public class MainWindow extends ActivityStoreView
 		for (Cell c : controller.getCells(card))
 		{
 			TableItem ti = new TableItem(CardViewer, SWT.NONE);
-			ti.setText(new String[] { c.getComment(), "", (String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });
+			ti.setText(new String[] { c.getComment(), controller.getCardCellVal(card.getId(), c.getId()), (String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });
 			ti.setData(c);
 		}
 

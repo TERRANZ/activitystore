@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ru.terra.activitystore.db.entity;
 
 import java.io.Serializable;
@@ -29,7 +33,7 @@ public class ListVal implements Serializable
     @Column(name = "value", nullable = false, length = 500)
     private String value;
     @JoinColumn(name = "list_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Vlist listId;
 
     public ListVal()

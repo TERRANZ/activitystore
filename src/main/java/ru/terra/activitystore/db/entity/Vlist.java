@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ru.terra.activitystore.db.entity;
 
 import java.io.Serializable;
@@ -36,9 +40,9 @@ public class Vlist implements Serializable
     @Column(name = "update_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listId")
     private List<ListVal> listValList;
-    @OneToMany(mappedBy = "listId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "listId")
     private List<Cell> cellList;
 
     public Vlist()

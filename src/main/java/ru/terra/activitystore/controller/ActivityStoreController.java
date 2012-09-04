@@ -178,4 +178,14 @@ public class ActivityStoreController
 	{
 		model.updateCell(cell);
 	}
+
+	public String getCardCellVal(Integer cardId, Integer cellId)
+	{
+		return model.getCellValue(cardId, cellId);
+	}
+
+	public void setCardCellVal(Integer cardId, Integer cellId, String val)
+	{
+		model.setCellValue(cardId, cellId, val);
+	}
 }

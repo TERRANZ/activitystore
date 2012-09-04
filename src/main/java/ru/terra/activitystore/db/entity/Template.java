@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ru.terra.activitystore.db.entity;
 
 import java.io.Serializable;
@@ -39,7 +43,7 @@ public class Template implements Serializable
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
     @JoinColumn(name = "card", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Card card;
 
     public Template()

@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ru.terra.activitystore.db.entity;
 
 import java.io.Serializable;
@@ -46,10 +50,10 @@ public class Cell implements Serializable
     @Column(name = "update_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
-    @ManyToMany(mappedBy = "cellList", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "cellList")
     private List<Card> cardList;
     @JoinColumn(name = "list_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Vlist listId;
 
     public Cell()
