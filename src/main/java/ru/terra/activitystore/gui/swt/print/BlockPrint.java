@@ -63,7 +63,7 @@ public class BlockPrint extends org.eclipse.swt.widgets.Dialog
 				browserLData.right = new FormAttachment(1000, 1000, 0);
 				browserLData.bottom = new FormAttachment(1000, 1000, 0);
 				browser.setLayoutData(browserLData);
-				browser.setText(BlockReportUtil.generateReport(block));
+				browser.setText(new BlockReportUtil().generateReport(block));
 			}
 			{
 				mainMenu = new Menu(dialogShell, SWT.BAR);

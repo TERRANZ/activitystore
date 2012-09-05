@@ -2,13 +2,18 @@ package ru.terra.activitystore.gui.swt;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -18,6 +23,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
@@ -44,16 +50,21 @@ public class MainWindow extends ActivityStoreView
 	{
 		public static final int BLOCK = 0;
 		public static final int CARD = 1;
+		public static final int CELL = 2;
 
 		public int type;
 		public Block block;
 		public Card card;
+		public Cell cell;
+		public boolean edit;
 
-		public ViewHolder(Block block, Card card, int type)
+		public ViewHolder(Block block, Card card, Cell cell, int type)
 		{
 			this.block = block;
 			this.card = card;
 			this.type = type;
+			this.edit = false;
+			this.cell = cell;
 		}
 	}
 
@@ -168,7 +179,7 @@ public class MainWindow extends ActivityStoreView
 						{
 							Block newBlock = new Block();
 							newBlock.setName(name);
-							ViewHolder newVH = new ViewHolder(newBlock, null, ViewHolder.BLOCK);
+							ViewHolder newVH = new ViewHolder(newBlock, null, null, ViewHolder.BLOCK);
 							TreeItem newItem = new TreeItem(parent, 0);
 							newItem.setText(name);
 							newItem.setData(newVH);
@@ -201,7 +212,7 @@ public class MainWindow extends ActivityStoreView
 						ViewHolder vh = (ViewHolder) parent.getData();
 						if (vh.type == ViewHolder.BLOCK)
 						{
-							ViewHolder newVH = new ViewHolder(null, card, ViewHolder.CARD);
+							ViewHolder newVH = new ViewHolder(null, card, null, ViewHolder.CARD);
 							TreeItem newItem = new TreeItem(parent, 0);
 							newItem.setText(card.getName());
 							newItem.setData(newVH);
@@ -385,7 +396,7 @@ public class MainWindow extends ActivityStoreView
 						else
 						{
 							tree.setMenu(cardMenu);
-							loadCard(((ViewHolder) item.getData()).card);
+							loadCard(((ViewHolder) item.getData()).block, ((ViewHolder) item.getData()).card);
 						}
 					}
 					else
@@ -397,17 +408,134 @@ public class MainWindow extends ActivityStoreView
 		});
 	}
 
-	private void loadCard(Card card)
+	private void loadCard(Block block, Card card)
 	{
 		CardViewer.clearAll();
 		CardViewer.removeAll();
 		for (Cell c : controller.getCells(card))
 		{
 			TableItem ti = new TableItem(CardViewer, SWT.NONE);
-			ti.setText(new String[] { c.getComment(), controller.getCardCellVal(card.getId(), c.getId()), (String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });
-			ti.setData(c);
+			ti.setText(new String[] { c.getComment(), controller.getCardCellVal(card.getId(), c.getId()),
+					(String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });
+			ti.setData(new ViewHolder(block, card, c, ViewHolder.CELL));
 		}
+		final TableEditor editor = new TableEditor(CardViewer);
+		editor.horizontalAlignment = SWT.LEFT;
+		editor.grabHorizontal = true;
+		CardViewer.addListener(SWT.MouseDown, new Listener()
+		{
+			public void handleEvent(Event event)
+			{
+				Rectangle clientArea = CardViewer.getClientArea();
+				Point pt = new Point(event.x, event.y);
+				boolean visible = false;
+				if (CardViewer.getSelectionCount() > 0)
+				{
+					// получаем выделенный элемент
+					final TableItem item = CardViewer.getSelection()[0];
+					// ищем колонку, в которую кликнули
+					for (int i = 0; i < CardViewer.getColumnCount(); i++)
+					{
+						Rectangle rect = item.getBounds(i);
+						if (rect.contains(pt))
+						{
+							// нашли колонку в которую кликнули
+							final int column = i;
+							switch (column)
+							{
+							case 1:
+							{
+								final Text text = new Text(CardViewer, SWT.NONE);
+								Listener textListener = new Listener()
+								{
+									public void handleEvent(final Event e)
+									{
+										switch (e.type)
+										{
+										case SWT.FocusOut:
+											item.setText(column, text.getText());
+											Integer cardId = ((ViewHolder) item.getData()).card.getId();
+											Integer cellId = ((ViewHolder) item.getData()).cell.getId();
+											controller.setCardCellVal(cardId, cellId, text.getText());
+											text.dispose();
+											break;
+										case SWT.Traverse:
+											switch (e.detail)
+											{
+											case SWT.TRAVERSE_RETURN:
+												item.setText(column, text.getText());
+												((ViewHolder) item.getData()).edit = true;
+												// FALL THROUGH
+											case SWT.TRAVERSE_ESCAPE:
+												text.dispose();
+												e.doit = false;
+											}
+											break;
+										}
+									}
+								};
+								text.addListener(SWT.FocusOut, textListener);
+								text.addListener(SWT.Traverse, textListener);
+								editor.setEditor(text, item, i);
+								text.setText(item.getText(i));
+								text.selectAll();
+								text.setFocus();
+								return;
+							}
+							case 2:
+							{
+								final Combo combo = new Combo(shell, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
+								Map<String, Integer> cellTypes = Constants.getConstants().getCellTypes();
+								for (Integer type : cellTypes.values())
+								{
+									combo.add((String) RandomUtils.getMapKeyByValue(cellTypes, type));
+								}
+								Listener comboListener = new Listener()
+								{
 
+									@Override
+									public void handleEvent(Event e)
+									{
+										switch (e.type)
+										{
+										case SWT.FocusOut:
+											item.setText(column, combo.getText());
+											((ViewHolder) item.getData()).edit = true;
+											combo.dispose();
+											break;
+										case SWT.Traverse:
+											switch (e.detail)
+											{
+											case SWT.TRAVERSE_RETURN:
+												item.setText(column, combo.getText());
+												((ViewHolder) item.getData()).edit = true;
+											case SWT.TRAVERSE_ESCAPE:
+												combo.dispose();
+												e.doit = false;
+											}
+											break;
+										}
+									}																	
+								};
+								combo.addListener(SWT.FocusOut, comboListener);
+								combo.addListener(SWT.Traverse, comboListener);
+								editor.setEditor(combo, item, i);
+								combo.setText(item.getText(i));
+								combo.setFocus();
+								return;
+							}
+							}
+						}
+						if (!visible && rect.intersects(clientArea))
+						{
+							visible = true;
+						}
+					}
+					if (!visible)
+						return;
+				}
+			}
+		});
 	}
 
 	@Override
@@ -429,7 +557,7 @@ public class MainWindow extends ActivityStoreView
 			}
 
 			newItem.setText(b.getName());
-			newItem.setData(new ViewHolder(b, null, ViewHolder.BLOCK));
+			newItem.setData(new ViewHolder(b, null, null, ViewHolder.BLOCK));
 			newItem.setImage(blockImage);
 			List<Card> cards = controller.getCards(b);
 			if (cards != null)
@@ -437,7 +565,7 @@ public class MainWindow extends ActivityStoreView
 				for (Card c : cards)
 				{
 					TreeItem cardItem = new TreeItem(newItem, 0);
-					cardItem.setData(new ViewHolder(null, c, ViewHolder.CARD));
+					cardItem.setData(new ViewHolder(null, c, null, ViewHolder.CARD));
 					cardItem.setText(c.getName());
 					cardItem.setImage(cardImage);
 				}

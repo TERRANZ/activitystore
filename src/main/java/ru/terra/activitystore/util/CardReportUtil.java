@@ -1,5 +1,6 @@
 package ru.terra.activitystore.util;
 
+import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 
@@ -8,7 +9,7 @@ public class CardReportUtil
 	public static String generateReport(Card card)
 	{
 		StringBuilder html = new StringBuilder();
-
+		ActivityStoreController controller = ActivityStoreController.getInstance();
 		if (card != null)
 		{
 			html.append("<html>");
@@ -39,7 +40,7 @@ public class CardReportUtil
 				html.append(cell.getComment());
 				html.append("</td>");
 				html.append("<td>");
-				html.append(cell.getVal());
+				html.append(controller.getCardCellVal(card.getId(), cell.getId()));
 				html.append("</td>");
 				html.append("</tr>");
 			}

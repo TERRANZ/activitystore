@@ -357,26 +357,36 @@ public class JpaModelImpl extends ActivityStoreModel
 	@Override
 	public String getCellValue(Integer cardId, Integer cellId)
 	{
-		ccv.getVal(cardId, cellId);
-		return null;
+		return ccv.getVal(cardId, cellId);
 	}
 
 	@Override
 	public void setCellValue(Integer cardId, Integer cellId, String val)
 	{
 		CardCellVal cc = ccv.getCardCellVal(cardId, cellId);
-		cc.setVal(val);
-		try
+		if (cc != null)
 		{
-			ccv.edit(cc);
-		} catch (NonexistentEntityException e)
+			cc.setVal(val);
+			try
+			{
+				ccv.edit(cc);
+			} catch (NonexistentEntityException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			cc = new CardCellVal();
+			cc.setCardId(cardId);
+			cc.setCellId(cellId);
+			cc.setVal(val);
+			ccv.create(cc);
 		}
 
 	}
