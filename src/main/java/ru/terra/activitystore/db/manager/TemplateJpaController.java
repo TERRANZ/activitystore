@@ -2,12 +2,14 @@ package ru.terra.activitystore.db.manager;
 
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Template;
 import ru.terra.activitystore.db.manager.exceptions.NonexistentEntityException;

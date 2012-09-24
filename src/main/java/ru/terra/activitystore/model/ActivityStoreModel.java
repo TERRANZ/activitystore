@@ -71,4 +71,12 @@ public abstract class ActivityStoreModel
 	public abstract String getCellValue(Integer cardId, Integer cellId);
 
 	public abstract void setCellValue(Integer cardId, Integer cellId, String val);
+
+	public abstract Template createTemlate(String name, Card card);
+
+	public abstract Template createTemlate(String name);
+
+	public abstract void updateTemplate(Template tpl);
+
+	public abstract void deleteTemplate(Template tpl);
 }

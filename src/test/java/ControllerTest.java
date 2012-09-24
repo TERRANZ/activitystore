@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import ru.terra.activitystore.constants.Constants;
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;

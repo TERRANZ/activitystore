@@ -1,5 +1,7 @@
 package ru.terra.activitystore.model;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManagerFactory;
@@ -87,7 +89,14 @@ public class JpaModelImpl extends ActivityStoreModel
 	@Override
 	public Card generateCardFromTemplate(Template template, Block block)
 	{
-		return null;
+		Card newCard = new Card();
+		newCard.setBlockId(block.getId());
+		newCard.setCellList(new ArrayList<Cell>(template.getCard().getCellList()));
+		newCard.setCreationDate(new Date());
+		newCard.setName(template.getCard().getName());
+		newCard.setTemplateId(template.getId());
+		saveCard(newCard);
+		return newCard;
 	}
 
 	@Override
@@ -389,5 +398,54 @@ public class JpaModelImpl extends ActivityStoreModel
 			ccv.create(cc);
 		}
 
+	}
+
+	@Override
+	public Template createTemlate(String name, Card card)
+	{
+		Template newTpl = new Template();
+		newTpl.setName(name);
+		newTpl.setCard(card);
+		tc.create(newTpl);
+		return newTpl;
+	}
+
+	@Override
+	public void updateTemplate(Template tpl)
+	{
+		try
+		{
+			tc.edit(tpl);
+		} catch (NonexistentEntityException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void deleteTemplate(Template tpl)
+	{
+		try
+		{
+			tc.destroy(tpl.getId());
+		} catch (NonexistentEntityException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Template createTemlate(String name)
+	{
+		Template newTpl = new Template();
+		newTpl.setName(name);
+		tc.create(newTpl);
+		return newTpl;
 	}
 }

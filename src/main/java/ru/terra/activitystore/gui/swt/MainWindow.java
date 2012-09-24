@@ -136,15 +136,29 @@ public class MainWindow extends ActivityStoreView
 		fileItem.setText("&Управление");
 		Menu submenu = new Menu(shell, SWT.DROP_DOWN);
 		fileItem.setMenu(submenu);
-		MenuItem item = new MenuItem(submenu, SWT.PUSH);
-		item.addListener(SWT.Selection, new Listener()
+		
+		MenuItem editTemplates = new MenuItem(submenu, SWT.PUSH);
+		editTemplates.setText("Настройка шаблонов");
+		editTemplates.addListener(SWT.Selection, new Listener()
+		{		
+			@Override
+			public void handleEvent(Event arg0)
+			{
+				TemplatesDialog td = new TemplatesDialog(shell);
+				td.open();
+				
+			}
+		});
+		
+		MenuItem exitItem = new MenuItem(submenu, SWT.PUSH);
+		exitItem.setText("Выход");
+		exitItem.addListener(SWT.Selection, new Listener()
 		{
 			public void handleEvent(Event e)
 			{
 				System.exit(0);
 			}
-		});
-		item.setText("Выход");
+		});		
 		createBlockMenu();
 		createCardMenu();
 	}

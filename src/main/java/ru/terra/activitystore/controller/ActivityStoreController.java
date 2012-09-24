@@ -188,4 +188,14 @@ public class ActivityStoreController
 	{
 		model.setCellValue(cardId, cellId, val);
 	}
+
+	public Template createTemplate(String name, Card card)
+	{
+		return model.createTemlate(name, card);
+	}
+
+	public void updateTemplate(Template tpl)
+	{
+		model.updateTemplate(tpl);
+	}
 }
