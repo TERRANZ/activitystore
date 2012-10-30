@@ -1,4 +1,4 @@
-package ru.terra.activitystore.gui.swt;
+package ru.terra.activitystore.gui.swt.select;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -12,6 +12,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+
+import ru.terra.activitystore.gui.swt.edit.AbstractEditDialog;
 
 public abstract class AbstractSelectDialog<T> extends Dialog
 {

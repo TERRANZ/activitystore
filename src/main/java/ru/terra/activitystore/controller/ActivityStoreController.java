@@ -7,6 +7,7 @@ import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.db.entity.Template;
+import ru.terra.activitystore.db.entity.Vlist;
 import ru.terra.activitystore.model.ActivityStoreModel;
 import ru.terra.activitystore.view.ActivityStoreView;
 
@@ -197,5 +198,15 @@ public class ActivityStoreController
 	public void updateTemplate(Template tpl)
 	{
 		model.updateTemplate(tpl);
+	}
+
+	public Vlist getList(Integer id)
+	{
+		return model.getList(id);
+	}
+
+	public List<Vlist> getAllLists()
+	{
+		return model.getAllLists();
 	}
 }

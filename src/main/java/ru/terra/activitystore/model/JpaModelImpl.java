@@ -12,11 +12,14 @@ import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.CardCellVal;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.db.entity.Template;
+import ru.terra.activitystore.db.entity.Vlist;
 import ru.terra.activitystore.db.manager.BlockJpaController;
 import ru.terra.activitystore.db.manager.CardCellValJpaController;
 import ru.terra.activitystore.db.manager.CardJpaController;
 import ru.terra.activitystore.db.manager.CellJpaController;
+import ru.terra.activitystore.db.manager.ListValJpaController;
 import ru.terra.activitystore.db.manager.TemplateJpaController;
+import ru.terra.activitystore.db.manager.VlistJpaController;
 import ru.terra.activitystore.db.manager.exceptions.IllegalOrphanException;
 import ru.terra.activitystore.db.manager.exceptions.NonexistentEntityException;
 
@@ -28,6 +31,8 @@ public class JpaModelImpl extends ActivityStoreModel
 	private CellJpaController cellc;
 	private TemplateJpaController tc;
 	private CardCellValJpaController ccv;
+	private VlistJpaController ljc;
+	private ListValJpaController lvjc;
 
 	public JpaModelImpl()
 	{
@@ -37,6 +42,7 @@ public class JpaModelImpl extends ActivityStoreModel
 		cellc = new CellJpaController(emf);
 		tc = new TemplateJpaController(emf);
 		ccv = new CardCellValJpaController(emf);
+		ljc = new VlistJpaController(emf);
 	}
 
 	@Override
@@ -435,7 +441,6 @@ public class JpaModelImpl extends ActivityStoreModel
 			tc.destroy(tpl.getId());
 		} catch (NonexistentEntityException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -447,5 +452,17 @@ public class JpaModelImpl extends ActivityStoreModel
 		newTpl.setName(name);
 		tc.create(newTpl);
 		return newTpl;
+	}
+
+	@Override
+	public Vlist getList(Integer id)
+	{
+		return ljc.findVlist(id);
+	}
+
+	@Override
+	public List<Vlist> getAllLists()
+	{
+		return ljc.findVlistEntities();
 	}
 }

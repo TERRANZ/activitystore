@@ -6,6 +6,7 @@ import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.db.entity.Template;
+import ru.terra.activitystore.db.entity.Vlist;
 
 public abstract class ActivityStoreModel
 {
@@ -79,4 +80,8 @@ public abstract class ActivityStoreModel
 	public abstract void updateTemplate(Template tpl);
 
 	public abstract void deleteTemplate(Template tpl);
+
+	public abstract List<Vlist> getAllLists();
+
+	public abstract Vlist getList(Integer id);
 }

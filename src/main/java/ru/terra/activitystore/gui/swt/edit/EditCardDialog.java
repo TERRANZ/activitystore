@@ -1,4 +1,4 @@
-package ru.terra.activitystore.gui.swt;
+package ru.terra.activitystore.gui.swt.edit;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
+import ru.terra.activitystore.gui.swt.select.SelectCellDialog;
 
 public class EditCardDialog extends AbstractEditDialog<Card>
 {

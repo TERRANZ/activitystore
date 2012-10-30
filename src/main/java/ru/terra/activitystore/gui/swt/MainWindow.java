@@ -32,8 +32,13 @@ import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
+import ru.terra.activitystore.gui.swt.edit.BlockInputDialog;
+import ru.terra.activitystore.gui.swt.edit.EditCardDialog;
+import ru.terra.activitystore.gui.swt.edit.ListSelectDialog;
 import ru.terra.activitystore.gui.swt.print.BlockPrint;
 import ru.terra.activitystore.gui.swt.print.CardPrint;
+import ru.terra.activitystore.gui.swt.select.TemplatesDialog;
+import ru.terra.activitystore.util.Pair;
 import ru.terra.activitystore.util.RandomUtils;
 import ru.terra.activitystore.view.ActivityStoreView;
 
@@ -41,7 +46,7 @@ public class MainWindow extends ActivityStoreView
 {
 	private Shell shell;
 	private Tree tree;
-	private Table CardViewer;
+	private Table cardViewer;
 	private Image blockImage, cardImage;
 	private Menu blockMenu, cardMenu;
 	private Display display;
@@ -105,19 +110,19 @@ public class MainWindow extends ActivityStoreView
 		shell.setText("Управление активностями");
 		fillMenu();
 		createTree();
-		CardViewer = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		cardViewer = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		String[] titles = { "Ячейка", "Значение", "Тип" };
 		for (int i = 0; i < titles.length; i++)
 		{
-			TableColumn column = new TableColumn(CardViewer, SWT.NONE);
+			TableColumn column = new TableColumn(cardViewer, SWT.NONE);
 			column.setText(titles[i]);
 		}
 		for (int i = 0; i < titles.length; i++)
 		{
-			CardViewer.getColumn(i).pack();
+			cardViewer.getColumn(i).pack();
 		}
-		CardViewer.setLinesVisible(true);
-		CardViewer.setHeaderVisible(true);
+		cardViewer.setLinesVisible(true);
+		cardViewer.setHeaderVisible(true);
 		shell.open();
 		controller.onViewStarted();
 		while (!shell.isDisposed())
@@ -136,20 +141,32 @@ public class MainWindow extends ActivityStoreView
 		fileItem.setText("&Управление");
 		Menu submenu = new Menu(shell, SWT.DROP_DOWN);
 		fileItem.setMenu(submenu);
-		
+
 		MenuItem editTemplates = new MenuItem(submenu, SWT.PUSH);
 		editTemplates.setText("Настройка шаблонов");
 		editTemplates.addListener(SWT.Selection, new Listener()
-		{		
+		{
 			@Override
 			public void handleEvent(Event arg0)
 			{
 				TemplatesDialog td = new TemplatesDialog(shell);
 				td.open();
-				
+
 			}
 		});
-		
+
+		MenuItem lists = new MenuItem(submenu, SWT.PUSH);
+		lists.setText("списки");
+		lists.addListener(SWT.Selection, new Listener()
+		{
+			@Override
+			public void handleEvent(Event arg0)
+			{
+				ListSelectDialog dlg = new ListSelectDialog(shell);
+				dlg.open();
+			}
+		});
+
 		MenuItem exitItem = new MenuItem(submenu, SWT.PUSH);
 		exitItem.setText("Выход");
 		exitItem.addListener(SWT.Selection, new Listener()
@@ -158,7 +175,7 @@ public class MainWindow extends ActivityStoreView
 			{
 				System.exit(0);
 			}
-		});		
+		});
 		createBlockMenu();
 		createCardMenu();
 	}
@@ -404,8 +421,8 @@ public class MainWindow extends ActivityStoreView
 						if (((ViewHolder) item.getData()).type == ViewHolder.BLOCK)
 						{
 							tree.setMenu(blockMenu);
-							CardViewer.clearAll();
-							CardViewer.removeAll();
+							cardViewer.clearAll();
+							cardViewer.removeAll();
 						}
 						else
 						{
@@ -424,31 +441,28 @@ public class MainWindow extends ActivityStoreView
 
 	private void loadCard(Block block, Card card)
 	{
-		CardViewer.clearAll();
-		CardViewer.removeAll();
+		cardViewer.clearAll();
+		cardViewer.removeAll();
 		for (Cell c : controller.getCells(card))
 		{
-			TableItem ti = new TableItem(CardViewer, SWT.NONE);
-			ti.setText(new String[] { c.getComment(), controller.getCardCellVal(card.getId(), c.getId()),
-					(String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });
+			TableItem ti = new TableItem(cardViewer, SWT.NONE);
+			String cellType = (String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType());
+			ti.setText(new String[] { c.getComment(), controller.getCardCellVal(card.getId(), c.getId()), cellType });
 			ti.setData(new ViewHolder(block, card, c, ViewHolder.CELL));
 		}
-		final TableEditor editor = new TableEditor(CardViewer);
-		editor.horizontalAlignment = SWT.LEFT;
-		editor.grabHorizontal = true;
-		CardViewer.addListener(SWT.MouseDown, new Listener()
+		cardViewer.addListener(SWT.MouseDown, new Listener()
 		{
 			public void handleEvent(Event event)
 			{
-				Rectangle clientArea = CardViewer.getClientArea();
+				Rectangle clientArea = cardViewer.getClientArea();
 				Point pt = new Point(event.x, event.y);
 				boolean visible = false;
-				if (CardViewer.getSelectionCount() > 0)
+				if (cardViewer.getSelectionCount() > 0)
 				{
 					// получаем выделенный элемент
-					final TableItem item = CardViewer.getSelection()[0];
+					final TableItem item = cardViewer.getSelection()[0];
 					// ищем колонку, в которую кликнули
-					for (int i = 0; i < CardViewer.getColumnCount(); i++)
+					for (int i = 0; i < cardViewer.getColumnCount(); i++)
 					{
 						Rectangle rect = item.getBounds(i);
 						if (rect.contains(pt))
@@ -459,54 +473,78 @@ public class MainWindow extends ActivityStoreView
 							{
 							case 1:
 							{
-								final Text text = new Text(CardViewer, SWT.NONE);
-								Listener textListener = new Listener()
+								Cell cell = ((ViewHolder) item.getData()).cell;
+								if (cell.getType() == 4)
 								{
-									public void handleEvent(final Event e)
+									ListSelectDialog dlg = new ListSelectDialog(shell);
+									Pair<Integer, List<Integer>> ret = dlg.open();
+									cell.setListId(controller.getList(ret.x));
+									String s = "";
+									for (Integer selectedListValId : ret.y)
 									{
-										switch (e.type)
-										{
-										case SWT.FocusOut:
-											item.setText(column, text.getText());
-											Integer cardId = ((ViewHolder) item.getData()).card.getId();
-											Integer cellId = ((ViewHolder) item.getData()).cell.getId();
-											controller.setCardCellVal(cardId, cellId, text.getText());
-											text.dispose();
-											break;
-										case SWT.Traverse:
-											switch (e.detail)
-											{
-											case SWT.TRAVERSE_RETURN:
-												item.setText(column, text.getText());
-												((ViewHolder) item.getData()).edit = true;
-												// FALL THROUGH
-											case SWT.TRAVERSE_ESCAPE:
-												text.dispose();
-												e.doit = false;
-											}
-											break;
-										}
+										s += selectedListValId.toString() + ",";
 									}
-								};
-								text.addListener(SWT.FocusOut, textListener);
-								text.addListener(SWT.Traverse, textListener);
-								editor.setEditor(text, item, i);
-								text.setText(item.getText(i));
-								text.selectAll();
-								text.setFocus();
+									s = s.substring(0, s.length() - 1);
+									cell.setVal(s);
+									controller.updateCell(cell);
+								}
+								else
+								{
+									final Text text = new Text(cardViewer, SWT.NONE);
+									final Integer cardId = ((ViewHolder) item.getData()).card.getId();
+									final Integer cellId = ((ViewHolder) item.getData()).cell.getId();
+									Listener textListener = new Listener()
+									{
+										public void handleEvent(final Event e)
+										{
+											switch (e.type)
+											{
+											case SWT.FocusOut:
+												item.setText(column, text.getText());
+												controller.setCardCellVal(cardId, cellId, text.getText());
+												text.dispose();
+												break;
+											case SWT.Traverse:
+												switch (e.detail)
+												{
+												case SWT.TRAVERSE_RETURN:
+													item.setText(column, text.getText());
+													((ViewHolder) item.getData()).edit = true;
+													// FALL THROUGH
+												case SWT.TRAVERSE_ESCAPE:
+													text.dispose();
+													e.doit = false;
+													controller.setCardCellVal(cardId, cellId, text.getText());
+												}
+												break;
+											}
+										}
+									};
+
+									text.addListener(SWT.FocusOut, textListener);
+									text.addListener(SWT.Traverse, textListener);
+									TableEditor editor = new TableEditor(cardViewer);
+									editor.horizontalAlignment = SWT.LEFT;
+									editor.grabHorizontal = true;
+
+									editor.setEditor(text, item, i);
+									text.setText(item.getText(i));
+									text.selectAll();
+									text.setFocus();
+								}
 								return;
 							}
 							case 2:
 							{
 								final Combo combo = new Combo(shell, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
-								Map<String, Integer> cellTypes = Constants.getConstants().getCellTypes();
+								TableEditor te = new TableEditor(cardViewer);
+								final Map<String, Integer> cellTypes = Constants.getConstants().getCellTypes();
 								for (Integer type : cellTypes.values())
 								{
 									combo.add((String) RandomUtils.getMapKeyByValue(cellTypes, type));
 								}
 								Listener comboListener = new Listener()
 								{
-
 									@Override
 									public void handleEvent(Event e)
 									{
@@ -515,6 +553,8 @@ public class MainWindow extends ActivityStoreView
 										case SWT.FocusOut:
 											item.setText(column, combo.getText());
 											((ViewHolder) item.getData()).edit = true;
+											((ViewHolder) item.getData()).cell.setType(cellTypes.get(combo.getText()));
+											controller.updateCell(((ViewHolder) item.getData()).cell);
 											combo.dispose();
 											break;
 										case SWT.Traverse:
@@ -523,16 +563,21 @@ public class MainWindow extends ActivityStoreView
 											case SWT.TRAVERSE_RETURN:
 												item.setText(column, combo.getText());
 												((ViewHolder) item.getData()).edit = true;
+												((ViewHolder) item.getData()).cell.setType(cellTypes.get(combo.getText()));
+												controller.updateCell(((ViewHolder) item.getData()).cell);
 											case SWT.TRAVERSE_ESCAPE:
 												combo.dispose();
 												e.doit = false;
 											}
 											break;
 										}
-									}																	
+									}
 								};
 								combo.addListener(SWT.FocusOut, comboListener);
 								combo.addListener(SWT.Traverse, comboListener);
+								TableEditor editor = new TableEditor(cardViewer);
+								editor.horizontalAlignment = SWT.LEFT;
+								editor.grabHorizontal = true;
 								editor.setEditor(combo, item, i);
 								combo.setText(item.getText(i));
 								combo.setFocus();

@@ -1,4 +1,4 @@
-package ru.terra.activitystore.gui.swt;
+package ru.terra.activitystore.gui.swt.edit;
 
 import java.util.Map;
 
@@ -93,6 +93,8 @@ public class EditCellDialog extends AbstractEditDialog<Cell>
 				if (cellType != null && cellType != "" && cellName != "")
 				{
 					ret = ActivityStoreController.getInstance().createCell(cellName);
+					ret.setType(Constants.getConstants().getCellTypes().get(cellType));
+					ActivityStoreController.getInstance().updateCell(ret);
 					shell.close();
 				}
 				else

@@ -1,4 +1,4 @@
-package ru.terra.activitystore.gui.swt;
+package ru.terra.activitystore.gui.swt.edit;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

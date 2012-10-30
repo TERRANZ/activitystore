@@ -14,6 +14,7 @@
       <property name="javax.persistence.jdbc.password" value="as"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.user" value="as"/>
+      <property name="eclipselink.ddl-generation" value="update"/>
     </properties>
   </persistence-unit>
 </persistence>

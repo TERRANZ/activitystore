@@ -1,4 +1,4 @@
-package ru.terra.activitystore.gui.swt;
+package ru.terra.activitystore.gui.swt.select;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Card;
+import ru.terra.activitystore.gui.swt.edit.EditCardDialog;
 
 public class SelectCardDialog extends AbstractSelectDialog<Card>
 {
