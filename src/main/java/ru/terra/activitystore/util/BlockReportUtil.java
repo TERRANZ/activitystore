@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
+
 import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
@@ -11,9 +14,17 @@ import ru.terra.activitystore.db.entity.Cell;
 
 public class BlockReportUtil
 {
-	Map<Integer, String> values = new HashMap<Integer, String>();
-	Map<Integer, Cell> cells = new HashMap<Integer, Cell>();
-	ActivityStoreController contoller = ActivityStoreController.getInstance();
+	private Map<Integer, String> values = new HashMap<Integer, String>();
+	private Map<Integer, Cell> cells = new HashMap<Integer, Cell>();
+	private ActivityStoreController contoller = ActivityStoreController.getInstance();
+
+	private Shell shell;
+
+	public BlockReportUtil(Shell shell)
+	{
+		super();
+		this.shell = shell;
+	}
 
 	public String generateReport(Block block)
 	{
@@ -89,14 +100,22 @@ public class BlockReportUtil
 				cells.put(cell.getId(), cell);
 				if (values.get(cell.getId()) != null)
 				{
+					String val = values.get(cell.getId());
 					switch (cell.getType())
 					{
 					case 0:// int
 					{
-						Long value = Long.parseLong(values.get(cell.getId()));
-						values.remove(cell.getId());
-						value += Long.parseLong(contoller.getCardCellVal(card.getId(), cell.getId()));
-						values.put(cell.getId(), value.toString());
+						try
+						{
+							Long value = Long.parseLong(val);
+							values.remove(cell.getId());
+							value += Long.parseLong(contoller.getCardCellVal(card.getId(), cell.getId()));
+							values.put(cell.getId(), value.toString());
+						} catch (NumberFormatException e)
+						{
+							MessageDialog.openError(shell, "Ошибка создания отчёта", "Ошибка разбора числа: " + val + " не число");
+							e.printStackTrace();
+						}
 					}
 						break;
 					case 1:// float

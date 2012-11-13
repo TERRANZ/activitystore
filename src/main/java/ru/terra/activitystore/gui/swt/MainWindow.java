@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionEvent;
@@ -198,26 +199,33 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				BlockInputDialog dlg = new BlockInputDialog(shell);
-				String name = dlg.open(null);
-				if (name != null)
+				try
 				{
-					TreeItem parent = tree.getSelection()[0];
-					if (parent != null)
+					BlockInputDialog dlg = new BlockInputDialog(shell);
+					String name = dlg.open(null);
+					if (name != null)
 					{
-						ViewHolder vh = (ViewHolder) parent.getData();
-						if (vh.type == ViewHolder.BLOCK)
+						TreeItem parent = tree.getSelection()[0];
+						if (parent != null)
 						{
-							Block newBlock = new Block();
-							newBlock.setName(name);
-							ViewHolder newVH = new ViewHolder(newBlock, null, null, ViewHolder.BLOCK);
-							TreeItem newItem = new TreeItem(parent, 0);
-							newItem.setText(name);
-							newItem.setData(newVH);
-							newItem.setImage(blockImage);
-							controller.addBlockToBlock(newBlock, vh.block);
+							ViewHolder vh = (ViewHolder) parent.getData();
+							if (vh.type == ViewHolder.BLOCK)
+							{
+								Block newBlock = new Block();
+								newBlock.setName(name);
+								ViewHolder newVH = new ViewHolder(newBlock, null, null, ViewHolder.BLOCK);
+								TreeItem newItem = new TreeItem(parent, 0);
+								newItem.setText(name);
+								newItem.setData(newVH);
+								newItem.setImage(blockImage);
+								controller.addBlockToBlock(newBlock, vh.block);
+							}
 						}
 					}
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при создании блока", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 
@@ -233,24 +241,31 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				EditCardDialog dlg = new EditCardDialog(shell);
-				Card card = dlg.open(null);
-				if (card != null)
+				try
 				{
-					TreeItem parent = tree.getSelection()[0];
-					if (parent != null)
+					EditCardDialog dlg = new EditCardDialog(shell);
+					Card card = dlg.open(null);
+					if (card != null)
 					{
-						ViewHolder vh = (ViewHolder) parent.getData();
-						if (vh.type == ViewHolder.BLOCK)
+						TreeItem parent = tree.getSelection()[0];
+						if (parent != null)
 						{
-							ViewHolder newVH = new ViewHolder(null, card, null, ViewHolder.CARD);
-							TreeItem newItem = new TreeItem(parent, 0);
-							newItem.setText(card.getName());
-							newItem.setData(newVH);
-							newItem.setImage(cardImage);
-							controller.addCardToBlock(card, vh.block);
+							ViewHolder vh = (ViewHolder) parent.getData();
+							if (vh.type == ViewHolder.BLOCK)
+							{
+								ViewHolder newVH = new ViewHolder(null, card, null, ViewHolder.CARD);
+								TreeItem newItem = new TreeItem(parent, 0);
+								newItem.setText(card.getName());
+								newItem.setData(newVH);
+								newItem.setImage(cardImage);
+								controller.addCardToBlock(card, vh.block);
+							}
 						}
 					}
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при создании карточки", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 
@@ -280,27 +295,34 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				if (tree.getSelection() != null && tree.getSelection().length == 1)
+				try
 				{
-					TreeItem selectedItem = tree.getSelection()[0];
-					if (selectedItem != null)
+					if (tree.getSelection() != null && tree.getSelection().length == 1)
 					{
-						ViewHolder vh = (ViewHolder) selectedItem.getData();
-						if (vh.type == ViewHolder.BLOCK)
+						TreeItem selectedItem = tree.getSelection()[0];
+						if (selectedItem != null)
 						{
-							BlockInputDialog dlg = new BlockInputDialog(shell);
-							Block selectedBlock = vh.block;
-							String name = dlg.open(selectedBlock.getName());
-							if (name != null)
+							ViewHolder vh = (ViewHolder) selectedItem.getData();
+							if (vh.type == ViewHolder.BLOCK)
 							{
-								selectedBlock.setName(name);
-								controller.updateBlock(selectedBlock);
-								vh.block = selectedBlock;
-								selectedItem.setData(vh);
-								selectedItem.setText(name);
+								BlockInputDialog dlg = new BlockInputDialog(shell);
+								Block selectedBlock = vh.block;
+								String name = dlg.open(selectedBlock.getName());
+								if (name != null)
+								{
+									selectedBlock.setName(name);
+									controller.updateBlock(selectedBlock);
+									vh.block = selectedBlock;
+									selectedItem.setData(vh);
+									selectedItem.setText(name);
+								}
 							}
 						}
 					}
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при редактировании имени блока", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 
@@ -317,18 +339,25 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				if (tree.getSelection() != null && tree.getSelection().length == 1)
+				try
 				{
-					TreeItem selectedBlock = tree.getSelection()[0];
-					if (selectedBlock != null)
+					if (tree.getSelection() != null && tree.getSelection().length == 1)
 					{
-						ViewHolder vh = (ViewHolder) selectedBlock.getData();
-						if (vh.type == ViewHolder.BLOCK)
+						TreeItem selectedBlock = tree.getSelection()[0];
+						if (selectedBlock != null)
 						{
-							Block block = vh.block;
-							new BlockPrint(block, shell, 0).open();
+							ViewHolder vh = (ViewHolder) selectedBlock.getData();
+							if (vh.type == ViewHolder.BLOCK)
+							{
+								Block block = vh.block;
+								new BlockPrint(block, shell, 0).open();
+							}
 						}
 					}
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при печати блока", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 
@@ -351,12 +380,19 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				TreeItem ti = tree.getSelection()[0];
-				if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
+				try
 				{
-					Card ret = new EditCardDialog(shell).open(((ViewHolder) ti.getData()).card);
-					if (ret != null)
-						controller.updateCard(ret);
+					TreeItem ti = tree.getSelection()[0];
+					if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
+					{
+						Card ret = new EditCardDialog(shell).open(((ViewHolder) ti.getData()).card);
+						if (ret != null)
+							controller.updateCard(ret);
+					}
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при редактировании карточки", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 
@@ -390,10 +426,17 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				TreeItem ti = tree.getSelection()[0];
-				if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
+				try
 				{
-					new CardPrint(((ViewHolder) ti.getData()).card, shell, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL).open();
+					TreeItem ti = tree.getSelection()[0];
+					if (ti != null && ((ViewHolder) ti.getData()).type == ViewHolder.CARD)
+					{
+						new CardPrint(((ViewHolder) ti.getData()).card, shell, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL).open();
+					}
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при печати карточки", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 
@@ -413,27 +456,34 @@ public class MainWindow extends ActivityStoreView
 			@Override
 			public void handleEvent(Event arg0)
 			{
-				if (tree.getSelection() != null && tree.getSelection().length > 0)
+				try
 				{
-					TreeItem item = tree.getSelection()[0];
-					if (item != null)
+					if (tree.getSelection() != null && tree.getSelection().length > 0)
 					{
-						if (((ViewHolder) item.getData()).type == ViewHolder.BLOCK)
+						TreeItem item = tree.getSelection()[0];
+						if (item != null)
 						{
-							tree.setMenu(blockMenu);
-							cardViewer.clearAll();
-							cardViewer.removeAll();
+							if (((ViewHolder) item.getData()).type == ViewHolder.BLOCK)
+							{
+								tree.setMenu(blockMenu);
+								cardViewer.clearAll();
+								cardViewer.removeAll();
+							}
+							else
+							{
+								tree.setMenu(cardMenu);
+								loadCard(((ViewHolder) item.getData()).block, ((ViewHolder) item.getData()).card);
+							}
 						}
 						else
 						{
-							tree.setMenu(cardMenu);
-							loadCard(((ViewHolder) item.getData()).block, ((ViewHolder) item.getData()).card);
+							tree.setMenu(null);
 						}
 					}
-					else
-					{
-						tree.setMenu(null);
-					}
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при создании карточки", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		});
@@ -454,144 +504,158 @@ public class MainWindow extends ActivityStoreView
 		{
 			public void handleEvent(Event event)
 			{
-				Rectangle clientArea = cardViewer.getClientArea();
-				Point pt = new Point(event.x, event.y);
-				boolean visible = false;
-				if (cardViewer.getSelectionCount() > 0)
+				try
 				{
-					// получаем выделенный элемент
-					final TableItem item = cardViewer.getSelection()[0];
-					// ищем колонку, в которую кликнули
-					for (int i = 0; i < cardViewer.getColumnCount(); i++)
+					Rectangle clientArea = cardViewer.getClientArea();
+					Point pt = new Point(event.x, event.y);
+					boolean visible = false;
+					if (cardViewer.getSelectionCount() > 0)
 					{
-						Rectangle rect = item.getBounds(i);
-						if (rect.contains(pt))
+						// получаем выделенный элемент
+						final TableItem item = cardViewer.getSelection()[0];
+						// ищем колонку, в которую кликнули
+						for (int i = 0; i < cardViewer.getColumnCount(); i++)
 						{
-							// нашли колонку в которую кликнули
-							final int column = i;
-							switch (column)
+							Rectangle rect = item.getBounds(i);
+							if (rect.contains(pt))
 							{
-							case 1:
-							{
-								Cell cell = ((ViewHolder) item.getData()).cell;
-								if (cell.getType() == 4)
+								// нашли колонку в которую кликнули
+								final int column = i;
+								final Integer cardId = ((ViewHolder) item.getData()).card.getId();
+								final Integer cellId = ((ViewHolder) item.getData()).cell.getId();
+								switch (column)
 								{
-									ListSelectDialog dlg = new ListSelectDialog(shell);
-									Pair<Integer, List<Integer>> ret = dlg.open();
-									cell.setListId(controller.getList(ret.x));
-									String s = "";
-									for (Integer selectedListValId : ret.y)
+								case 1:
+								{
+									Cell cell = ((ViewHolder) item.getData()).cell;
+									if (cell.getType() == 4)
 									{
-										s += selectedListValId.toString() + ",";
+										ListSelectDialog dlg = new ListSelectDialog(shell);
+										Pair<Integer, List<Integer>> ret = dlg.open();
+										cell.setListId(controller.getList(ret.x));
+										String s = "";
+										if (ret.y != null)
+										{
+											for (Integer selectedListValId : ret.y)
+											{
+												s += selectedListValId.toString() + ",";
+											}
+											s = s.substring(0, s.length() - 1);
+											// cell.setVal(s);
+											// controller.updateCell(cell);
+											controller.setCardCellVal(cardId, cellId, s);
+											item.setText(1, s);
+										}
 									}
-									s = s.substring(0, s.length() - 1);
-									cell.setVal(s);
-									controller.updateCell(cell);
-								}
-								else
-								{
-									final Text text = new Text(cardViewer, SWT.NONE);
-									final Integer cardId = ((ViewHolder) item.getData()).card.getId();
-									final Integer cellId = ((ViewHolder) item.getData()).cell.getId();
-									Listener textListener = new Listener()
+									else
 									{
-										public void handleEvent(final Event e)
+										final Text text = new Text(cardViewer, SWT.NONE);
+										// final Integer cardId = ((ViewHolder) item.getData()).card.getId();
+										// final Integer cellId = ((ViewHolder) item.getData()).cell.getId();
+										Listener textListener = new Listener()
+										{
+											public void handleEvent(final Event e)
+											{
+												switch (e.type)
+												{
+												case SWT.FocusOut:
+													item.setText(column, text.getText());
+													controller.setCardCellVal(cardId, cellId, text.getText());
+													text.dispose();
+													break;
+												case SWT.Traverse:
+													switch (e.detail)
+													{
+													case SWT.TRAVERSE_RETURN:
+														item.setText(column, text.getText());
+														((ViewHolder) item.getData()).edit = true;
+														// FALL THROUGH
+													case SWT.TRAVERSE_ESCAPE:
+														text.dispose();
+														e.doit = false;
+														controller.setCardCellVal(cardId, cellId, text.getText());
+													}
+													break;
+												}
+											}
+										};
+
+										text.addListener(SWT.FocusOut, textListener);
+										text.addListener(SWT.Traverse, textListener);
+										TableEditor editor = new TableEditor(cardViewer);
+										editor.horizontalAlignment = SWT.LEFT;
+										editor.grabHorizontal = true;
+
+										editor.setEditor(text, item, i);
+										text.setText(item.getText(i));
+										text.selectAll();
+										text.setFocus();
+									}
+									return;
+								}
+								case 2:
+								{
+									final Combo combo = new Combo(shell, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
+									TableEditor te = new TableEditor(cardViewer);
+									final Map<String, Integer> cellTypes = Constants.getConstants().getCellTypes();
+									for (Integer type : cellTypes.values())
+									{
+										combo.add((String) RandomUtils.getMapKeyByValue(cellTypes, type));
+									}
+									Listener comboListener = new Listener()
+									{
+										@Override
+										public void handleEvent(Event e)
 										{
 											switch (e.type)
 											{
 											case SWT.FocusOut:
-												item.setText(column, text.getText());
-												controller.setCardCellVal(cardId, cellId, text.getText());
-												text.dispose();
+												item.setText(column, combo.getText());
+												((ViewHolder) item.getData()).edit = true;
+												((ViewHolder) item.getData()).cell.setType(cellTypes.get(combo.getText()));
+												controller.updateCell(((ViewHolder) item.getData()).cell);
+												combo.dispose();
 												break;
 											case SWT.Traverse:
 												switch (e.detail)
 												{
 												case SWT.TRAVERSE_RETURN:
-													item.setText(column, text.getText());
+													item.setText(column, combo.getText());
 													((ViewHolder) item.getData()).edit = true;
-													// FALL THROUGH
+													((ViewHolder) item.getData()).cell.setType(cellTypes.get(combo.getText()));
+													controller.updateCell(((ViewHolder) item.getData()).cell);
 												case SWT.TRAVERSE_ESCAPE:
-													text.dispose();
+													combo.dispose();
 													e.doit = false;
-													controller.setCardCellVal(cardId, cellId, text.getText());
 												}
 												break;
 											}
 										}
 									};
-
-									text.addListener(SWT.FocusOut, textListener);
-									text.addListener(SWT.Traverse, textListener);
+									combo.addListener(SWT.FocusOut, comboListener);
+									combo.addListener(SWT.Traverse, comboListener);
 									TableEditor editor = new TableEditor(cardViewer);
 									editor.horizontalAlignment = SWT.LEFT;
 									editor.grabHorizontal = true;
-
-									editor.setEditor(text, item, i);
-									text.setText(item.getText(i));
-									text.selectAll();
-									text.setFocus();
+									editor.setEditor(combo, item, i);
+									combo.setText(item.getText(i));
+									combo.setFocus();
+									return;
 								}
-								return;
+								}
 							}
-							case 2:
+							if (!visible && rect.intersects(clientArea))
 							{
-								final Combo combo = new Combo(shell, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
-								TableEditor te = new TableEditor(cardViewer);
-								final Map<String, Integer> cellTypes = Constants.getConstants().getCellTypes();
-								for (Integer type : cellTypes.values())
-								{
-									combo.add((String) RandomUtils.getMapKeyByValue(cellTypes, type));
-								}
-								Listener comboListener = new Listener()
-								{
-									@Override
-									public void handleEvent(Event e)
-									{
-										switch (e.type)
-										{
-										case SWT.FocusOut:
-											item.setText(column, combo.getText());
-											((ViewHolder) item.getData()).edit = true;
-											((ViewHolder) item.getData()).cell.setType(cellTypes.get(combo.getText()));
-											controller.updateCell(((ViewHolder) item.getData()).cell);
-											combo.dispose();
-											break;
-										case SWT.Traverse:
-											switch (e.detail)
-											{
-											case SWT.TRAVERSE_RETURN:
-												item.setText(column, combo.getText());
-												((ViewHolder) item.getData()).edit = true;
-												((ViewHolder) item.getData()).cell.setType(cellTypes.get(combo.getText()));
-												controller.updateCell(((ViewHolder) item.getData()).cell);
-											case SWT.TRAVERSE_ESCAPE:
-												combo.dispose();
-												e.doit = false;
-											}
-											break;
-										}
-									}
-								};
-								combo.addListener(SWT.FocusOut, comboListener);
-								combo.addListener(SWT.Traverse, comboListener);
-								TableEditor editor = new TableEditor(cardViewer);
-								editor.horizontalAlignment = SWT.LEFT;
-								editor.grabHorizontal = true;
-								editor.setEditor(combo, item, i);
-								combo.setText(item.getText(i));
-								combo.setFocus();
-								return;
-							}
+								visible = true;
 							}
 						}
-						if (!visible && rect.intersects(clientArea))
-						{
-							visible = true;
-						}
+						if (!visible)
+							return;
 					}
-					if (!visible)
-						return;
+				} catch (Exception e)
+				{
+					MessageDialog.openError(shell, "Ошибка при создании карточки", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		});

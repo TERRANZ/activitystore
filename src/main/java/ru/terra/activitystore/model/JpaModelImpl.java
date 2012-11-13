@@ -457,7 +457,10 @@ public class JpaModelImpl extends ActivityStoreModel
 	@Override
 	public Vlist getList(Integer id)
 	{
-		return ljc.findVlist(id);
+		if (id != null)
+			return ljc.findVlist(id);
+		else
+			return null;
 	}
 
 	@Override
