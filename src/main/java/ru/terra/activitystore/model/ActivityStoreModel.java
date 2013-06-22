@@ -84,4 +84,6 @@ public abstract class ActivityStoreModel
 	public abstract List<Vlist> getAllLists();
 
 	public abstract Vlist getList(Integer id);
+
+	public abstract String getListValue(Integer val);
 }

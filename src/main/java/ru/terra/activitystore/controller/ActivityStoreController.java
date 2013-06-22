@@ -11,202 +11,168 @@ import ru.terra.activitystore.db.entity.Vlist;
 import ru.terra.activitystore.model.ActivityStoreModel;
 import ru.terra.activitystore.view.ActivityStoreView;
 
-public class ActivityStoreController
-{
+public class ActivityStoreController {
 	private ActivityStoreModel model;
 	private ActivityStoreView view;
 	private static ActivityStoreController instance = new ActivityStoreController();
 
-	public ActivityStoreController(ActivityStoreModel model, ActivityStoreView view)
-	{
+	public ActivityStoreController(ActivityStoreModel model, ActivityStoreView view) {
 		super();
 		this.model = model;
 		this.view = view;
 	}
 
-	public void start()
-	{
+	public void start() {
 		model.start();
 		view.start();
 	}
 
-	public static ActivityStoreController getInstance()
-	{
+	public static ActivityStoreController getInstance() {
 		return instance;
 	}
 
-	private ActivityStoreController()
-	{
+	private ActivityStoreController() {
 		this.model = ActivityStoreModel.getDefaultImpl();
 		this.view = ActivityStoreView.getDefaultView(this);
 	}
 
-	public List<Block> getBlocks(Block root)
-	{
+	public List<Block> getBlocks(Block root) {
 		return model.getBlocks(root);
 	}
 
-	public List<Card> getCards(Block block)
-	{
+	public List<Card> getCards(Block block) {
 		return model.getCards(block);
 	}
 
-	public List<Card> getAllCards()
-	{
+	public List<Card> getAllCards() {
 		return model.getAllCards();
 	}
 
-	public List<Cell> getCells(Card card)
-	{
+	public List<Cell> getCells(Card card) {
 		return model.getCells(card);
 	}
 
-	public List<Cell> getAllCells()
-	{
+	public List<Cell> getAllCells() {
 		return model.getAllCells();
 	}
 
-	public List<Template> getAllTemplates()
-	{
+	public List<Template> getAllTemplates() {
 		return model.getTemplates();
 	}
 
-	public Card generateCardFromTemplate(Template template, Block block)
-	{
+	public Card generateCardFromTemplate(Template template, Block block) {
 		return model.generateCardFromTemplate(template, block);
 	}
 
-	public Block createBlock(String name, Block parent)
-	{
+	public Block createBlock(String name, Block parent) {
 		return model.createBlock(name, parent);
 	}
 
-	public Boolean deleteBlock(Block block, Boolean recursive)
-	{
+	public Boolean deleteBlock(Block block, Boolean recursive) {
 		return model.deleteBlock(block, recursive);
 	}
 
-	public Card createCard(String name)
-	{
+	public Card createCard(String name) {
 		return model.createCard(name);
 	}
 
-	public Card createCard(String name, Block parent)
-	{
+	public Card createCard(String name, Block parent) {
 		return model.createCard(name, parent);
 	}
 
-	public Card createCard(String name, Template parent)
-	{
+	public Card createCard(String name, Template parent) {
 		return model.createCard(name, parent);
 	}
 
-	public Boolean deleteCard(Card card, Boolean recursive)
-	{
+	public Boolean deleteCard(Card card, Boolean recursive) {
 		return model.deleteCard(card, recursive);
 	}
 
-	public Card addCellToCard(Cell cell, Card card)
-	{
+	public Card addCellToCard(Cell cell, Card card) {
 		return model.addCellToCard(cell, card);
 	}
 
-	public Card deleteCellFromCard(Cell cell, Card card)
-	{
+	public Card deleteCellFromCard(Cell cell, Card card) {
 		return model.deleteCellFromCard(cell, card);
 	}
 
-	public Block addCardToBlock(Card card, Block block)
-	{
+	public Block addCardToBlock(Card card, Block block) {
 		return model.addCardToBlock(card, block);
 	}
 
-	public Block getBlock(Integer id)
-	{
+	public Block getBlock(Integer id) {
 		return model.getBlock(id);
 	}
 
-	public Card getCard(Integer id)
-	{
+	public Card getCard(Integer id) {
 		return model.getCard(id);
 	}
 
-	public void onViewStarted()
-	{
+	public void onViewStarted() {
 		view.fillBlocksTree(model.getAllBlocks());
 	}
 
-	public void addBlockToBlock(Block newBlock, Block parent)
-	{
+	public void addBlockToBlock(Block newBlock, Block parent) {
 		model.addBlockToBlock(newBlock, parent);
 	}
 
-	public void updateBlock(Block block)
-	{
+	public void updateBlock(Block block) {
 		block.setUpdateDate(new Date());
 		model.updateBlock(block);
 	}
 
-	public void updateCard(Card card)
-	{
+	public void updateCard(Card card) {
 		card.setUpdateDate(new Date());
 		model.updateCard(card);
 	}
 
-	public Card saveNewCard(Card card)
-	{
+	public Card saveNewCard(Card card) {
 		return model.saveCard(card);
 	}
 
-	public Cell saveNewCell(Cell cell)
-	{
+	public Cell saveNewCell(Cell cell) {
 		return model.saveCell(cell);
 	}
 
-	public Block saveNewBlock(Block block)
-	{
+	public Block saveNewBlock(Block block) {
 		return model.saveBlock(block);
 	}
 
-	public Cell createCell(String name)
-	{
+	public Cell createCell(String name) {
 		Cell ret = new Cell();
 		ret.setComment(name);
 		return model.saveCell(ret);
 	}
 
-	public void updateCell(Cell cell)
-	{
+	public void updateCell(Cell cell) {
 		model.updateCell(cell);
 	}
 
-	public String getCardCellVal(Integer cardId, Integer cellId)
-	{
+	public String getCardCellVal(Integer cardId, Integer cellId) {
 		return model.getCellValue(cardId, cellId);
 	}
 
-	public void setCardCellVal(Integer cardId, Integer cellId, String val)
-	{
+	public void setCardCellVal(Integer cardId, Integer cellId, String val) {
 		model.setCellValue(cardId, cellId, val);
 	}
 
-	public Template createTemplate(String name, Card card)
-	{
+	public Template createTemplate(String name, Card card) {
 		return model.createTemlate(name, card);
 	}
 
-	public void updateTemplate(Template tpl)
-	{
+	public void updateTemplate(Template tpl) {
 		model.updateTemplate(tpl);
 	}
 
-	public Vlist getList(Integer id)
-	{
+	public Vlist getList(Integer id) {
 		return model.getList(id);
 	}
 
-	public List<Vlist> getAllLists()
-	{
+	public List<Vlist> getAllLists() {
 		return model.getAllLists();
+	}
+
+	public String getListValue(Integer val) {
+		return model.getListValue(val);
 	}
 }

@@ -570,10 +570,10 @@ public class MainWindow extends ActivityStoreView
 														item.setText(column, text.getText());
 														((ViewHolder) item.getData()).edit = true;
 														// FALL THROUGH
-													case SWT.TRAVERSE_ESCAPE:
-														text.dispose();
+													case SWT.TRAVERSE_ESCAPE:													
 														e.doit = false;
 														controller.setCardCellVal(cardId, cellId, text.getText());
+														text.dispose();
 													}
 													break;
 												}

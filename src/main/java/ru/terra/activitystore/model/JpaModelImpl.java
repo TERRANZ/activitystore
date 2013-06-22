@@ -43,6 +43,7 @@ public class JpaModelImpl extends ActivityStoreModel
 		tc = new TemplateJpaController(emf);
 		ccv = new CardCellValJpaController(emf);
 		ljc = new VlistJpaController(emf);
+		lvjc = new ListValJpaController(emf);
 	}
 
 	@Override
@@ -467,5 +468,10 @@ public class JpaModelImpl extends ActivityStoreModel
 	public List<Vlist> getAllLists()
 	{
 		return ljc.findVlistEntities();
+	}
+
+	@Override
+	public String getListValue(Integer val) {
+		return lvjc.findListVal(val).getValue();
 	}
 }

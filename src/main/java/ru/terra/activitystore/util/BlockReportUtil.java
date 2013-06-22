@@ -11,26 +11,23 @@ import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
+import ru.terra.activitystore.db.entity.Vlist;
 
-public class BlockReportUtil
-{
+public class BlockReportUtil {
 	private Map<Integer, String> values = new HashMap<Integer, String>();
 	private Map<Integer, Cell> cells = new HashMap<Integer, Cell>();
 	private ActivityStoreController contoller = ActivityStoreController.getInstance();
 
 	private Shell shell;
 
-	public BlockReportUtil(Shell shell)
-	{
+	public BlockReportUtil(Shell shell) {
 		super();
 		this.shell = shell;
 	}
 
-	public String generateReport(Block block)
-	{
+	public String generateReport(Block block) {
 		StringBuilder html = new StringBuilder();
-		if (block != null)
-		{
+		if (block != null) {
 			html.append("<html>");
 			html.append("<head>");
 			html.append("<title>");
@@ -55,8 +52,7 @@ public class BlockReportUtil
 			html.append("Значение");
 			html.append("</th>");
 			html.append("</tr>");
-			for (Integer c : values.keySet())
-			{
+			for (Integer c : values.keySet()) {
 				Cell cell = cells.get(c);
 				html.append("<tr>");
 				html.append("<td>");
@@ -76,43 +72,33 @@ public class BlockReportUtil
 		return html.toString();
 	}
 
-	private void genBlockRepRecursive(Block block)
-	{
+	private void genBlockRepRecursive(Block block) {
 		List<Block> childrens = contoller.getBlocks(block);
 		genBlockRep(block);
-		if (childrens != null && childrens.size() > 0)
-		{
-			for (Block b : childrens)
-			{
+		if (childrens != null && childrens.size() > 0) {
+			for (Block b : childrens) {
 				if (b.getId() != 0)
 					genBlockRepRecursive(b);
 			}
 		}
 	}
 
-	private void genBlockRep(Block block)
-	{
-		List<Card> cards = ActivityStoreController.getInstance().getCards(block);
-		for (Card card : cards)
-		{
-			for (Cell cell : card.getCellList())
-			{
+	private void genBlockRep(Block block) {
+		List<Card> cards = contoller.getCards(block);
+		for (Card card : cards) {
+			for (Cell cell : card.getCellList()) {
 				cells.put(cell.getId(), cell);
-				if (values.get(cell.getId()) != null)
-				{
+				if (values.get(cell.getId()) != null) {
 					String val = values.get(cell.getId());
-					switch (cell.getType())
-					{
+					switch (cell.getType()) {
 					case 0:// int
 					{
-						try
-						{
+						try {
 							Long value = Long.parseLong(val);
 							values.remove(cell.getId());
 							value += Long.parseLong(contoller.getCardCellVal(card.getId(), cell.getId()));
 							values.put(cell.getId(), value.toString());
-						} catch (NumberFormatException e)
-						{
+						} catch (NumberFormatException e) {
 							MessageDialog.openError(shell, "Ошибка создания отчёта", "Ошибка разбора числа: " + val + " не число");
 							e.printStackTrace();
 						}
@@ -127,13 +113,22 @@ public class BlockReportUtil
 						values.put(cell.getId(), value.toString());
 					}
 						break;
-					}
-
-				}
-				else
-				{
-					switch (cell.getType())
+					case 4:// list
 					{
+						String[] list = cell.getVal().split(",");
+						String value = values.get(cell.getId());
+						values.remove(cell.getId());
+						value += "</br>";
+						for (String id : list) {
+							value += contoller.getListValue(Integer.parseInt(id)) + ", ";
+						}
+						value = value.substring(0, value.length() - 2);
+						values.put(cell.getId(), value);
+					}
+						break;
+					}
+				} else {
+					switch (cell.getType()) {
 					case 0:// int
 					{
 						values.put(cell.getId(), contoller.getCardCellVal(card.getId(), cell.getId()));
@@ -142,6 +137,17 @@ public class BlockReportUtil
 					case 1:// float
 					{
 						values.put(cell.getId(), contoller.getCardCellVal(card.getId(), cell.getId()));
+					}
+						break;
+					case 4:// list
+					{
+						String[] list = contoller.getCardCellVal(card.getId(), cell.getId()).split(",");
+						String value = "";
+						for (String id : list) {
+							value += contoller.getListValue(Integer.parseInt(id)) + ", ";
+						}
+						value = value.substring(0, value.length() - 2);
+						values.put(cell.getId(), value);
 					}
 						break;
 					}
