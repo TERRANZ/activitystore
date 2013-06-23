@@ -115,7 +115,7 @@ public class BlockReportUtil {
 						break;
 					case 4:// list
 					{
-						String[] list = cell.getVal().split(",");
+						String[] list = contoller.getCardCellVal(card.getId(), cell.getId()).split(",");
 						String value = values.get(cell.getId());
 						values.remove(cell.getId());
 						value += "</br>";
