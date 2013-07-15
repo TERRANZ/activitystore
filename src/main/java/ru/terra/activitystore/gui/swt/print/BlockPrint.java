@@ -2,12 +2,22 @@ package ru.terra.activitystore.gui.swt.print;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.printing.PrintDialog;
+import org.eclipse.swt.printing.Printer;
+import org.eclipse.swt.printing.PrinterData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
 import ru.terra.activitystore.db.entity.Block;
@@ -63,10 +73,39 @@ public class BlockPrint extends org.eclipse.swt.widgets.Dialog
 				browser.setText(new BlockReportUtil(parent).generateReport(block));
 			}
 			{
-				mainMenu = new Menu(dialogShell, SWT.BAR);
+				mainMenu = new Menu(dialogShell, SWT.BAR);				
+				MenuItem mainItem = new MenuItem(mainMenu, SWT.CASCADE);
+				mainItem.setText("&Отчёт");
+				Menu submenu = new Menu(dialogShell, SWT.DROP_DOWN);
+				mainItem.setMenu(submenu);
+				
+				MenuItem print = new MenuItem(submenu, SWT.PUSH);
+				print.setText("&Печать");
+				print.addListener(SWT.Selection, new Listener()
+				{
+					@Override
+					public void handleEvent(Event arg0)
+					{
+						browser.execute("javascript:window.print();");
+					}
+				});
+				
+				MenuItem exit = new MenuItem(submenu, SWT.PUSH);
+				exit.setText("&Выход");
+				exit.addListener(SWT.Selection, new Listener()
+				{
+					@Override
+					public void handleEvent(Event arg0)
+					{
+						dialogShell.close();
+					}
+				});
+
+
 				dialogShell.setMenuBar(mainMenu);
 			}
 			dialogShell.setLocation(getParent().toDisplay(100, 100));
+			
 			dialogShell.open();
 			Display display = dialogShell.getDisplay();
 			while (!dialogShell.isDisposed())

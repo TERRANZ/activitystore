@@ -21,22 +21,19 @@ import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.gui.swt.select.SelectCellDialog;
 
-public class EditCardDialog extends AbstractEditDialog<Card>
-{
+public class EditCardDialog extends AbstractEditDialog<Card> {
 	private String cardName;
 	private String name;
 	private Card ret, card;
 	private Table cellsTable;
 	private Text cardNameInput;
 
-	public EditCardDialog(Shell arg0)
-	{
+	public EditCardDialog(Shell arg0) {
 		super(arg0);
 	}
 
 	@Override
-	public Card open(Card card)
-	{
+	public Card open(Card card) {
 		Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
 		this.card = card;
@@ -44,19 +41,17 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 		shell.pack();
 		shell.open();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed())
-		{
-			if (!display.readAndDispatch())
-			{
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
 		}
 		return ret;
 	}
 
-	private void createContents(final Shell shell)
-	{
-		shell.setLayout(new GridLayout(2, true));
+	private void createContents(final Shell shell) {
+		GridLayout gl = new GridLayout(2, true);
+		shell.setLayout(gl);
 		Label label = new Label(shell, SWT.NONE);
 		label.setText("Новая карточка");
 		GridData data = new GridData();
@@ -73,32 +68,26 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 		cellsTable = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		cellsTable.setLinesVisible(true);
 		data = new GridData(GridData.FILL_HORIZONTAL);
+		data.verticalAlignment = GridData.FILL_VERTICAL;
+		data.grabExcessVerticalSpace = true;
 		data.horizontalSpan = 2;
 		cellsTable.setLayoutData(data);
-
-		if (card != null)
-		{
+		if (card != null) {
 			loadCard();
-		}
-		else
-		{
+		} else {
 			card = ActivityStoreController.getInstance().createCard("");
 		}
 
 		Menu cellsMenu = new Menu(cellsTable);
 		MenuItem miDelete = new MenuItem(cellsMenu, SWT.POP_UP);
 		miDelete.setText("Удалить");
-		miDelete.addSelectionListener(new SelectionListener()
-		{
+		miDelete.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent arg0)
-			{
-				if (cellsTable.getSelection() != null && cellsTable.getSelection().length == 1)
-				{
+			public void widgetSelected(SelectionEvent arg0) {
+				if (cellsTable.getSelection() != null && cellsTable.getSelection().length == 1) {
 					TableItem selected = cellsTable.getSelection()[0];
-					if (selected != null)
-					{
+					if (selected != null) {
 						Cell c = (Cell) selected.getData();
 						ActivityStoreController.getInstance().deleteCellFromCard(c, card);
 						cellsTable.remove(cellsTable.getSelectionIndex());
@@ -108,22 +97,18 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0)
-			{
+			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 		});
 
 		MenuItem miAdd = new MenuItem(cellsMenu, SWT.POP_UP);
 		miAdd.setText("Добавить");
-		miAdd.addSelectionListener(new SelectionListener()
-		{
+		miAdd.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent arg0)
-			{
+			public void widgetSelected(SelectionEvent arg0) {
 				Cell newCell = new SelectCellDialog(shell).open();
-				if (newCell != null)
-				{
+				if (newCell != null) {
 					ActivityStoreController.getInstance().addCellToCard(newCell, card);
 					newCell.getCardList().add(card);
 					TableItem newItem = new TableItem(cellsTable, SWT.NONE);
@@ -133,8 +118,7 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0)
-			{
+			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 		});
 
@@ -144,10 +128,8 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 		ok.setText("OK");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
-		ok.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		ok.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				cardName = cardNameInput.getText();
 				card.setName(cardName);
 				ret = card;
@@ -159,10 +141,8 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 		cancel.setText("Отмена");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
-		cancel.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		cancel.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				cardName = null;
 				card = null;
 				ret = card;
@@ -173,12 +153,10 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 		shell.setDefaultButton(ok);
 	}
 
-	private void loadCard()
-	{
+	private void loadCard() {
 		cardNameInput.setText(card.getName());
 		cellsTable.setRedraw(false);
-		for (Cell c : ActivityStoreController.getInstance().getCells(card))
-		{
+		for (Cell c : ActivityStoreController.getInstance().getCells(card)) {
 			TableItem ti = new TableItem(cellsTable, SWT.NONE);
 			ti.setText(0, c.getComment());
 			ti.setData(c);
@@ -188,8 +166,7 @@ public class EditCardDialog extends AbstractEditDialog<Card>
 	}
 
 	@Override
-	public Card open()
-	{
+	public Card open() {
 		return open(null);
 	}
 }
