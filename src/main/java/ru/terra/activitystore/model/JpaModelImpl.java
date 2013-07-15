@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.eclipse.persistence.internal.sessions.remote.RemoveServerSideRemoteValueHolderCommand;
+
 import ru.terra.activitystore.db.entity.Block;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.CardCellVal;
@@ -23,8 +25,7 @@ import ru.terra.activitystore.db.manager.VlistJpaController;
 import ru.terra.activitystore.db.manager.exceptions.IllegalOrphanException;
 import ru.terra.activitystore.db.manager.exceptions.NonexistentEntityException;
 
-public class JpaModelImpl extends ActivityStoreModel
-{
+public class JpaModelImpl extends ActivityStoreModel {
 
 	private BlockJpaController bc;
 	private CardJpaController cardc;
@@ -34,8 +35,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	private VlistJpaController ljc;
 	private ListValJpaController lvjc;
 
-	public JpaModelImpl()
-	{
+	public JpaModelImpl() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("activitystorePU");
 		bc = new BlockJpaController(emf);
 		cardc = new CardJpaController(emf);
@@ -47,55 +47,46 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public void start()
-	{
+	public void start() {
 	}
 
 	@Override
-	public List<Block> getAllBlocks()
-	{
+	public List<Block> getAllBlocks() {
 		return bc.findBlockEntities();
 	}
 
 	@Override
-	public List<Block> getBlocks(Block root)
-	{
+	public List<Block> getBlocks(Block root) {
 		return bc.findBlockEntities(root);
 	}
 
 	@Override
-	public List<Card> getCards(Block block)
-	{
+	public List<Card> getCards(Block block) {
 		return cardc.findCardEntities(block);
 	}
 
 	@Override
-	public List<Card> getAllCards()
-	{
+	public List<Card> getAllCards() {
 		return cardc.findCardEntities();
 	}
 
 	@Override
-	public List<Cell> getCells(Card card)
-	{
+	public List<Cell> getCells(Card card) {
 		return cellc.findCellEntities(card);
 	}
 
 	@Override
-	public List<Cell> getAllCells()
-	{
+	public List<Cell> getAllCells() {
 		return cellc.findCellEntities();
 	}
 
 	@Override
-	public List<Template> getTemplates()
-	{
+	public List<Template> getTemplates() {
 		return tc.findTemplateEntities();
 	}
 
 	@Override
-	public Card generateCardFromTemplate(Template template, Block block)
-	{
+	public Card generateCardFromTemplate(Template template, Block block) {
 		Card newCard = new Card();
 		newCard.setBlockId(block.getId());
 		newCard.setCellList(new ArrayList<Cell>(template.getCard().getCellList()));
@@ -107,8 +98,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Block createBlock(String name, Block parent)
-	{
+	public Block createBlock(String name, Block parent) {
 		Block newBlock = new Block();
 		newBlock.setName(name);
 		newBlock.setParent(parent.getId());
@@ -117,13 +107,17 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Boolean deleteBlock(Block block, Boolean recursive)
-	{
-		try
-		{
+	public Boolean deleteBlock(Block block, Boolean recursive) {
+		if (recursive) {
+			for (Card c : getCards(block))
+				deleteCard(c, true);
+			for (Block b : getBlocks(block)) {
+				deleteBlock(b, true);
+			}
+		}
+		try {
 			bc.destroy(block.getId());
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -131,8 +125,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Card createCard(String name, Block parent)
-	{
+	public Card createCard(String name, Block parent) {
 		Card newCard = new Card();
 		newCard.setName(name);
 		newCard.setBlockId(parent != null ? parent.getId() : null);
@@ -141,8 +134,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Card createCard(String name, Template parent)
-	{
+	public Card createCard(String name, Template parent) {
 		Card newCard = new Card();
 		newCard.setName(name);
 		newCard.setTemplateId(parent != null ? parent.getId() : null);
@@ -151,17 +143,13 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Boolean deleteCard(Card card, Boolean recursive)
-	{
-		try
-		{
+	public Boolean deleteCard(Card card, Boolean recursive) {
+		try {
 			cardc.destroy(card.getId());
-		} catch (IllegalOrphanException e)
-		{
+		} catch (IllegalOrphanException e) {
 			e.printStackTrace();
 			return false;
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -169,40 +157,31 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Card addCellToCard(Cell cell, Card card)
-	{
-		if (cell.getId() == null)
-		{
+	public Card addCellToCard(Cell cell, Card card) {
+		if (cell.getId() == null) {
 			cell = saveCell(cell);
 			cell.getCardList().add(card);
-			try
-			{
+			try {
 				cellc.edit(cell);
-			} catch (NonexistentEntityException e)
-			{
+			} catch (NonexistentEntityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 		card.getCellList().add(cell);
-		try
-		{
+		try {
 			cardc.edit(card);
-		} catch (IllegalOrphanException e)
-		{
+		} catch (IllegalOrphanException e) {
 			e.printStackTrace();
 			return null;
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
 			return null;
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -210,22 +189,17 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Card deleteCellFromCard(Cell cell, Card card)
-	{
+	public Card deleteCellFromCard(Cell cell, Card card) {
 		card.getCellList().remove(cell);
-		try
-		{
+		try {
 			cardc.edit(card);
-		} catch (IllegalOrphanException e)
-		{
+		} catch (IllegalOrphanException e) {
 			e.printStackTrace();
 			return null;
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
 			return null;
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -233,24 +207,19 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Block addCardToBlock(Card card, Block block)
-	{
+	public Block addCardToBlock(Card card, Block block) {
 		card.setBlockId(block.getId());
 		if (card.getId() == null)
 			card = saveCard(card);
-		try
-		{
+		try {
 			cardc.edit(card);
-		} catch (IllegalOrphanException e)
-		{
+		} catch (IllegalOrphanException e) {
 			e.printStackTrace();
 			return null;
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
 			return null;
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -258,32 +227,26 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Block getBlock(Integer id)
-	{
+	public Block getBlock(Integer id) {
 		return bc.findBlock(id);
 	}
 
 	@Override
-	public Card getCard(Integer id)
-	{
+	public Card getCard(Integer id) {
 		return cardc.findCard(id);
 	}
 
 	@Override
-	public Boolean addBlockToBlock(Block newBlock, Block parent)
-	{
+	public Boolean addBlockToBlock(Block newBlock, Block parent) {
 		newBlock.setParent(parent.getId());
 		if (newBlock.getId() == null)
 			newBlock = saveBlock(newBlock);
-		try
-		{
+		try {
 			bc.edit(newBlock);
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
 			return false;
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -291,79 +254,62 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public void updateBlock(Block block)
-	{
-		try
-		{
+	public void updateBlock(Block block) {
+		try {
 			bc.edit(block);
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void updateCard(Card card)
-	{
-		try
-		{
+	public void updateCard(Card card) {
+		try {
 			cardc.edit(card);
-		} catch (IllegalOrphanException e)
-		{
+		} catch (IllegalOrphanException e) {
 			e.printStackTrace();
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public Card saveCard(Card card)
-	{
+	public Card saveCard(Card card) {
 		cardc.create(card);
 		return card;
 	}
 
 	@Override
-	public Cell saveCell(Cell cell)
-	{
+	public Cell saveCell(Cell cell) {
 		cellc.create(cell);
 		return cell;
 	}
 
 	@Override
-	public Block saveBlock(Block block)
-	{
+	public Block saveBlock(Block block) {
 		bc.create(block);
 		return block;
 	}
 
 	@Override
-	public void updateCell(Cell cell)
-	{
-		try
-		{
+	public void updateCell(Cell cell) {
+		try {
 			cellc.edit(cell);
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public Card createCard(String name)
-	{
+	public Card createCard(String name) {
 		Card newCard = new Card();
 		newCard.setName(name);
 		cardc.create(newCard);
@@ -371,33 +317,25 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public String getCellValue(Integer cardId, Integer cellId)
-	{
+	public String getCellValue(Integer cardId, Integer cellId) {
 		return ccv.getVal(cardId, cellId);
 	}
 
 	@Override
-	public void setCellValue(Integer cardId, Integer cellId, String val)
-	{
+	public void setCellValue(Integer cardId, Integer cellId, String val) {
 		CardCellVal cc = ccv.getCardCellVal(cardId, cellId);
-		if (cc != null)
-		{
+		if (cc != null) {
 			cc.setVal(val);
-			try
-			{
+			try {
 				ccv.edit(cc);
-			} catch (NonexistentEntityException e)
-			{
+			} catch (NonexistentEntityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		else
-		{
+		} else {
 			cc = new CardCellVal();
 			cc.setCardId(cardId);
 			cc.setCellId(cellId);
@@ -408,8 +346,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Template createTemlate(String name, Card card)
-	{
+	public Template createTemlate(String name, Card card) {
 		Template newTpl = new Template();
 		newTpl.setName(name);
 		newTpl.setCard(card);
@@ -418,37 +355,29 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public void updateTemplate(Template tpl)
-	{
-		try
-		{
+	public void updateTemplate(Template tpl) {
+		try {
 			tc.edit(tpl);
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void deleteTemplate(Template tpl)
-	{
-		try
-		{
+	public void deleteTemplate(Template tpl) {
+		try {
 			tc.destroy(tpl.getId());
-		} catch (NonexistentEntityException e)
-		{
+		} catch (NonexistentEntityException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public Template createTemlate(String name)
-	{
+	public Template createTemlate(String name) {
 		Template newTpl = new Template();
 		newTpl.setName(name);
 		tc.create(newTpl);
@@ -456,8 +385,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public Vlist getList(Integer id)
-	{
+	public Vlist getList(Integer id) {
 		if (id != null)
 			return ljc.findVlist(id);
 		else
@@ -465,8 +393,7 @@ public class JpaModelImpl extends ActivityStoreModel
 	}
 
 	@Override
-	public List<Vlist> getAllLists()
-	{
+	public List<Vlist> getAllLists() {
 		return ljc.findVlistEntities();
 	}
 

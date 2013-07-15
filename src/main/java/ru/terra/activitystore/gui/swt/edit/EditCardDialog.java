@@ -68,9 +68,11 @@ public class EditCardDialog extends AbstractEditDialog<Card> {
 		cellsTable = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		cellsTable.setLinesVisible(true);
 		data = new GridData(GridData.FILL_HORIZONTAL);
-		data.verticalAlignment = GridData.FILL_VERTICAL;
-		data.grabExcessVerticalSpace = true;
 		data.horizontalSpan = 2;
+		data.verticalAlignment = GridData.FILL;
+		data.grabExcessVerticalSpace = true;
+		data.horizontalAlignment = GridData.FILL;
+		data.grabExcessHorizontalSpace = true;
 		cellsTable.setLayoutData(data);
 		if (card != null) {
 			loadCard();
