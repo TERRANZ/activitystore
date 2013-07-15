@@ -3,18 +3,15 @@ package ru.terra.activitystore.constants;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Constants
-{
+public class Constants {
 	private static Constants instance = new Constants();
 	private HashMap<String, Integer> cellTypes = new HashMap<String, Integer>();
 
-	public static Constants getConstants()
-	{
+	public static Constants getConstants() {
 		return instance;
 	}
 
-	private Constants()
-	{
+	private Constants() {
 		cellTypes.put("Целые числа", 0);
 		cellTypes.put("Дробные числа", 1);
 		cellTypes.put("Строка", 2);
@@ -23,8 +20,7 @@ public class Constants
 		cellTypes.put("Дата", 5);
 	}
 
-	public Map<String, Integer> getCellTypes()
-	{
+	public Map<String, Integer> getCellTypes() {
 		return cellTypes;
 	}
 }

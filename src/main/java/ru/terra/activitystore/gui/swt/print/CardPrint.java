@@ -15,13 +15,16 @@ import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.util.CardReportUtil;
 
 /**
- * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI Builder, which is free for non-commercial use. If Jigloo is being used
- * commercially (ie, by a corporation, company or business for any purpose whatever) then you should purchase a license for each developer using
- * Jigloo. Please visit www.cloudgarden.com for details. Use of Jigloo implies acceptance of these licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN
- * PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+ * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI
+ * Builder, which is free for non-commercial use. If Jigloo is being used
+ * commercially (ie, by a corporation, company or business for any purpose
+ * whatever) then you should purchase a license for each developer using Jigloo.
+ * Please visit www.cloudgarden.com for details. Use of Jigloo implies
+ * acceptance of these licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN
+ * PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR
+ * ANY CORPORATE OR COMMERCIAL PURPOSE.
  */
-public class CardPrint extends org.eclipse.swt.widgets.Dialog
-{
+public class CardPrint extends org.eclipse.swt.widgets.Dialog {
 
 	private Shell dialogShell;
 	private Menu mainMenu;
@@ -33,19 +36,17 @@ public class CardPrint extends org.eclipse.swt.widgets.Dialog
 	private Card card;
 
 	/**
-	 * Auto-generated main method to display this org.eclipse.swt.widgets.Dialog inside a new Shell.
+	 * Auto-generated main method to display this org.eclipse.swt.widgets.Dialog
+	 * inside a new Shell.
 	 */
 
-	public CardPrint(Card card, Shell parent, int style)
-	{
+	public CardPrint(Card card, Shell parent, int style) {
 		super(parent, style);
 		this.card = card;
 	}
 
-	public void open()
-	{
-		try
-		{
+	public void open() {
+		try {
 			Shell parent = getParent();
 			dialogShell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 
@@ -74,13 +75,11 @@ public class CardPrint extends org.eclipse.swt.widgets.Dialog
 			dialogShell.setLocation(getParent().toDisplay(100, 100));
 			dialogShell.open();
 			Display display = dialogShell.getDisplay();
-			while (!dialogShell.isDisposed())
-			{
+			while (!dialogShell.isDisposed()) {
 				if (!display.readAndDispatch())
 					display.sleep();
 			}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

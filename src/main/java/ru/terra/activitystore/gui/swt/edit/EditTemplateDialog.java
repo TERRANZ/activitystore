@@ -14,48 +14,40 @@ import org.eclipse.swt.widgets.Text;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Template;
 
-public class EditTemplateDialog extends AbstractEditDialog<Template>
-{
+public class EditTemplateDialog extends AbstractEditDialog<Template> {
 	private Template ret;
 	private String templateName;
 	private Text templateNameInput;
 
-	public EditTemplateDialog(Shell arg0)
-	{
+	public EditTemplateDialog(Shell arg0) {
 		super(arg0);
 	}
 
-	public Template open()
-	{
+	public Template open() {
 		return open(null);
 	}
 
 	@Override
-	public Template open(Template parent)
-	{
+	public Template open(Template parent) {
 		Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
 		this.ret = parent;
-		if (parent != null)
-		{
+		if (parent != null) {
 			templateName = parent.getName();
 		}
 		createContents(shell);
 		shell.pack();
 		shell.open();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed())
-		{
-			if (!display.readAndDispatch())
-			{
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
 		}
 		return ret;
 	}
 
-	private void createContents(final Shell shell)
-	{
+	private void createContents(final Shell shell) {
 		shell.setLayout(new GridLayout(2, true));
 		Label label = new Label(shell, SWT.NONE);
 		label.setText("Шаблон");
@@ -80,14 +72,11 @@ public class EditTemplateDialog extends AbstractEditDialog<Template>
 		setCard.setText("Карточка");
 		data = new GridData(GridData.FILL);
 		setCard.setLayoutData(data);
-		setCard.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		setCard.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				EditCardDialog dlg = new EditCardDialog(shell);
 				Card card = dlg.open(null);
-				if (card != null)
-				{
+				if (card != null) {
 					templateName = templateNameInput.getText();
 					if (ret == null)
 						ret = controller.createTemplate(templateName, card);
@@ -102,10 +91,8 @@ public class EditTemplateDialog extends AbstractEditDialog<Template>
 		ok.setText("OK");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
-		ok.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		ok.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				templateName = templateNameInput.getText();
 				ret.setName(templateName);
 				shell.close();
@@ -116,10 +103,8 @@ public class EditTemplateDialog extends AbstractEditDialog<Template>
 		cancel.setText("Отмена");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
-		cancel.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		cancel.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				shell.close();
 			}
 		});

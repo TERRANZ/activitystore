@@ -20,42 +20,35 @@ import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.util.RandomUtils;
 
-public class EditCellDialog extends AbstractEditDialog<Cell>
-{
+public class EditCellDialog extends AbstractEditDialog<Cell> {
 	private String cellName;
 	private String name;
 	private Cell ret;
 
-	public EditCellDialog(Shell arg0)
-	{
+	public EditCellDialog(Shell arg0) {
 		super(arg0);
 	}
 
 	@Override
-	public Cell open(Cell cell)
-	{
+	public Cell open(Cell cell) {
 		Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
 		createContents(shell);
-		if (cell != null)
-		{
+		if (cell != null) {
 			name = cell.getComment();
 		}
 		shell.pack();
 		shell.open();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed())
-		{
-			if (!display.readAndDispatch())
-			{
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
 		}
 		return ret;
 	}
 
-	private void createContents(final Shell shell)
-	{
+	private void createContents(final Shell shell) {
 		shell.setLayout(new GridLayout(2, true));
 		Label label = new Label(shell, SWT.NONE);
 		label.setText("Новая ячейка");
@@ -75,8 +68,7 @@ public class EditCellDialog extends AbstractEditDialog<Cell>
 		data.horizontalSpan = 2;
 		combo.setLayoutData(data);
 		Map<String, Integer> cellTypes = Constants.getConstants().getCellTypes();
-		for (Integer type : cellTypes.values())
-		{
+		for (Integer type : cellTypes.values()) {
 			combo.add((String) RandomUtils.getMapKeyByValue(cellTypes, type));
 		}
 
@@ -84,21 +76,16 @@ public class EditCellDialog extends AbstractEditDialog<Cell>
 		ok.setText("OK");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
-		ok.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		ok.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				cellName = textCellName.getText();
 				String cellType = combo.getText();
-				if (cellType != null && cellType != "" && cellName != "")
-				{
+				if (cellType != null && cellType != "" && cellName != "") {
 					ret = ActivityStoreController.getInstance().createCell(cellName);
 					ret.setType(Constants.getConstants().getCellTypes().get(cellType));
 					ActivityStoreController.getInstance().updateCell(ret);
 					shell.close();
-				}
-				else
-				{
+				} else {
 					MessageBox mb = new MessageBox(shell);
 					mb.setMessage("Не заполнены поля");
 					mb.open();
@@ -110,10 +97,8 @@ public class EditCellDialog extends AbstractEditDialog<Cell>
 		cancel.setText("Отмена");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
-		cancel.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		cancel.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				cellName = null;
 				ret = null;
 				shell.close();
@@ -124,8 +109,7 @@ public class EditCellDialog extends AbstractEditDialog<Cell>
 	}
 
 	@Override
-	public Cell open()
-	{
+	public Cell open() {
 		return open(null);
 	}
 }

@@ -4,14 +4,11 @@ import ru.terra.activitystore.controller.ActivityStoreController;
 import ru.terra.activitystore.db.entity.Card;
 import ru.terra.activitystore.db.entity.Cell;
 
-public class CardReportUtil
-{
-	public static String generateReport(Card card)
-	{
+public class CardReportUtil {
+	public static String generateReport(Card card) {
 		StringBuilder html = new StringBuilder();
 		ActivityStoreController controller = ActivityStoreController.getInstance();
-		if (card != null)
-		{
+		if (card != null) {
 			html.append("<html>");
 			html.append("<head>");
 			html.append("<title>");
@@ -33,8 +30,7 @@ public class CardReportUtil
 			html.append("Значение");
 			html.append("</th>");
 			html.append("</tr>");
-			for (Cell cell : card.getCellList())
-			{
+			for (Cell cell : card.getCellList()) {
 				html.append("<tr>");
 				html.append("<td>");
 				html.append(cell.getComment());

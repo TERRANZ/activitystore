@@ -35,8 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
 		@NamedQuery(name = "Vlist.findById", query = "SELECT v FROM Vlist v WHERE v.id = :id"),
 		@NamedQuery(name = "Vlist.findByCreationDate", query = "SELECT v FROM Vlist v WHERE v.creationDate = :creationDate"),
 		@NamedQuery(name = "Vlist.findByUpdateDate", query = "SELECT v FROM Vlist v WHERE v.updateDate = :updateDate") })
-public class Vlist implements Serializable
-{
+public class Vlist implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,110 +56,91 @@ public class Vlist implements Serializable
 	@Column(name = "name")
 	private String name;
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Vlist()
-	{
+	public Vlist() {
 	}
 
-	public Vlist(Integer id)
-	{
+	public Vlist(Integer id) {
 		this.id = id;
 	}
 
-	public Vlist(Integer id, Date creationDate)
-	{
+	public Vlist(Integer id, Date creationDate) {
 		this.id = id;
 		this.creationDate = creationDate;
 	}
 
-	public Integer getId()
-	{
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer id)
-	{
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public Date getCreationDate()
-	{
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate)
-	{
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public Date getUpdateDate()
-	{
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Date updateDate)
-	{
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 
 	@XmlTransient
-	public List<ListVal> getListValList()
-	{
+	public List<ListVal> getListValList() {
 		return listValList;
 	}
 
-	public void setListValList(List<ListVal> listValList)
-	{
+	public void setListValList(List<ListVal> listValList) {
 		this.listValList = listValList;
 	}
 
 	@XmlTransient
-	public List<Cell> getCellList()
-	{
+	public List<Cell> getCellList() {
 		return cellList;
 	}
 
-	public void setCellList(List<Cell> cellList)
-	{
+	public void setCellList(List<Cell> cellList) {
 		this.cellList = cellList;
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int hash = 0;
 		hash += (id != null ? id.hashCode() : 0);
 		return hash;
 	}
 
 	@Override
-	public boolean equals(Object object)
-	{
-		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Vlist))
-		{
+	public boolean equals(Object object) {
+		// TODO: Warning - this method won't work in the case the id fields are
+		// not set
+		if (!(object instanceof Vlist)) {
 			return false;
 		}
 		Vlist other = (Vlist) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
-		{
+		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "ru.terra.activitystore.db.entity.Vlist[ id=" + id + " ]";
 	}
 

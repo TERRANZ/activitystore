@@ -22,172 +22,135 @@ import ru.terra.activitystore.db.manager.exceptions.NonexistentEntityException;
  * 
  * @author terranz
  */
-public class CardCellValJpaController implements Serializable
-{
+public class CardCellValJpaController implements Serializable {
 
-	public CardCellValJpaController(EntityManagerFactory emf)
-	{
+	public CardCellValJpaController(EntityManagerFactory emf) {
 		this.emf = emf;
 	}
 
 	private EntityManagerFactory emf = null;
 
-	public EntityManager getEntityManager()
-	{
+	public EntityManager getEntityManager() {
 		return emf.createEntityManager();
 	}
 
-	public void create(CardCellVal cardCellVal)
-	{
+	public void create(CardCellVal cardCellVal) {
 		EntityManager em = null;
-		try
-		{
+		try {
 			em = getEntityManager();
 			em.getTransaction().begin();
 			em.persist(cardCellVal);
 			em.getTransaction().commit();
-		} finally
-		{
-			if (em != null)
-			{
+		} finally {
+			if (em != null) {
 				em.close();
 			}
 		}
 	}
 
-	public void edit(CardCellVal cardCellVal) throws NonexistentEntityException, Exception
-	{
+	public void edit(CardCellVal cardCellVal) throws NonexistentEntityException, Exception {
 		EntityManager em = null;
-		try
-		{
+		try {
 			em = getEntityManager();
 			em.getTransaction().begin();
 			cardCellVal = em.merge(cardCellVal);
 			em.getTransaction().commit();
-		} catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			String msg = ex.getLocalizedMessage();
-			if (msg == null || msg.length() == 0)
-			{
+			if (msg == null || msg.length() == 0) {
 				Integer id = cardCellVal.getId();
-				if (findCardCellVal(id) == null)
-				{
+				if (findCardCellVal(id) == null) {
 					throw new NonexistentEntityException("The cardCellVal with id " + id + " no longer exists.");
 				}
 			}
 			throw ex;
-		} finally
-		{
-			if (em != null)
-			{
+		} finally {
+			if (em != null) {
 				em.close();
 			}
 		}
 	}
 
-	public void destroy(Integer id) throws NonexistentEntityException
-	{
+	public void destroy(Integer id) throws NonexistentEntityException {
 		EntityManager em = null;
-		try
-		{
+		try {
 			em = getEntityManager();
 			em.getTransaction().begin();
 			CardCellVal cardCellVal;
-			try
-			{
+			try {
 				cardCellVal = em.getReference(CardCellVal.class, id);
 				cardCellVal.getId();
-			} catch (EntityNotFoundException enfe)
-			{
+			} catch (EntityNotFoundException enfe) {
 				throw new NonexistentEntityException("The cardCellVal with id " + id + " no longer exists.", enfe);
 			}
 			em.remove(cardCellVal);
 			em.getTransaction().commit();
-		} finally
-		{
-			if (em != null)
-			{
+		} finally {
+			if (em != null) {
 				em.close();
 			}
 		}
 	}
 
-	public List<CardCellVal> findCardCellValEntities()
-	{
+	public List<CardCellVal> findCardCellValEntities() {
 		return findCardCellValEntities(true, -1, -1);
 	}
 
-	public List<CardCellVal> findCardCellValEntities(int maxResults, int firstResult)
-	{
+	public List<CardCellVal> findCardCellValEntities(int maxResults, int firstResult) {
 		return findCardCellValEntities(false, maxResults, firstResult);
 	}
 
-	public String getVal(Integer cardId, Integer cellId)
-	{
+	public String getVal(Integer cardId, Integer cellId) {
 		CardCellVal ccv = getCardCellVal(cardId, cellId);
 		return ccv == null ? "" : ccv.getVal();
 	}
 
-	public CardCellVal getCardCellVal(Integer cardId, Integer cellId)
-	{
+	public CardCellVal getCardCellVal(Integer cardId, Integer cellId) {
 		EntityManager em = getEntityManager();
 		Query q = em.createNamedQuery("CardCellVal.findByCardIdAndCellId").setParameter("cardId", cardId).setParameter("cellId", cellId);
-		try
-		{
+		try {
 			return (CardCellVal) q.getSingleResult();
-		} catch (NoResultException e)
-		{
+		} catch (NoResultException e) {
 			return null;
-		} finally
-		{
+		} finally {
 			em.close();
 		}
 	}
 
-	private List<CardCellVal> findCardCellValEntities(boolean all, int maxResults, int firstResult)
-	{
+	private List<CardCellVal> findCardCellValEntities(boolean all, int maxResults, int firstResult) {
 		EntityManager em = getEntityManager();
-		try
-		{
+		try {
 			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
 			cq.select(cq.from(CardCellVal.class));
 			Query q = em.createQuery(cq);
-			if (!all)
-			{
+			if (!all) {
 				q.setMaxResults(maxResults);
 				q.setFirstResult(firstResult);
 			}
 			return q.getResultList();
-		} finally
-		{
+		} finally {
 			em.close();
 		}
 	}
 
-	public CardCellVal findCardCellVal(Integer id)
-	{
+	public CardCellVal findCardCellVal(Integer id) {
 		EntityManager em = getEntityManager();
-		try
-		{
+		try {
 			return em.find(CardCellVal.class, id);
-		} finally
-		{
+		} finally {
 			em.close();
 		}
 	}
 
-	public int getCardCellValCount()
-	{
+	public int getCardCellValCount() {
 		EntityManager em = getEntityManager();
-		try
-		{
+		try {
 			CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
 			Root<CardCellVal> rt = cq.from(CardCellVal.class);
 			cq.select(em.getCriteriaBuilder().count(rt));
 			Query q = em.createQuery(cq);
 			return ((Long) q.getSingleResult()).intValue();
-		} finally
-		{
+		} finally {
 			em.close();
 		}
 	}

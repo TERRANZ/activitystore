@@ -10,19 +10,15 @@ import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.gui.swt.edit.EditCellDialog;
 import ru.terra.activitystore.util.RandomUtils;
 
-public class SelectCellDialog extends AbstractSelectDialog<Cell>
-{
-	public SelectCellDialog(Shell arg0)
-	{
+public class SelectCellDialog extends AbstractSelectDialog<Cell> {
+	public SelectCellDialog(Shell arg0) {
 		super(arg0, "Новая", "Выберите ячейку", new EditCellDialog(arg0));
 	}
 
 	@Override
-	protected void loadCells()
-	{
+	protected void loadCells() {
 		getTable().clearAll();
-		for (Cell c : ActivityStoreController.getInstance().getAllCells())
-		{
+		for (Cell c : ActivityStoreController.getInstance().getAllCells()) {
 			TableItem ti = new TableItem(getTable(), SWT.NONE);
 			ti.setText(new String[] { c.getComment(), (String) RandomUtils.getMapKeyByValue(Constants.getConstants().getCellTypes(), c.getType()) });
 			ti.setData(c);

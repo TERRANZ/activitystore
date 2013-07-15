@@ -8,10 +8,8 @@ import ru.terra.activitystore.db.entity.Cell;
 import ru.terra.activitystore.db.entity.Template;
 import ru.terra.activitystore.db.entity.Vlist;
 
-public abstract class ActivityStoreModel
-{
-	public static ActivityStoreModel getDefaultImpl()
-	{
+public abstract class ActivityStoreModel {
+	public static ActivityStoreModel getDefaultImpl() {
 		return new JpaModelImpl();
 	}
 

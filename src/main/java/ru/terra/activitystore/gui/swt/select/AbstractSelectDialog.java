@@ -15,8 +15,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import ru.terra.activitystore.gui.swt.edit.AbstractEditDialog;
 
-public abstract class AbstractSelectDialog<T> extends Dialog
-{
+public abstract class AbstractSelectDialog<T> extends Dialog {
 
 	protected T ret;
 	protected String newButtonText, selectText;
@@ -24,8 +23,7 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 	private AbstractEditDialog<T> editDialog;
 	private Shell shell;
 
-	public AbstractSelectDialog(Shell arg0, String newButtonText, String selectText, AbstractEditDialog<T> editDialog)
-	{
+	public AbstractSelectDialog(Shell arg0, String newButtonText, String selectText, AbstractEditDialog<T> editDialog) {
 		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		this.newButtonText = newButtonText;
 		this.selectText = selectText;
@@ -33,36 +31,30 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 		this.shell = arg0;
 	}
 
-	protected Shell getShell()
-	{
+	protected Shell getShell() {
 		return shell;
 	}
 
-	protected Table getTable()
-	{
+	protected Table getTable() {
 		return table;
 	}
 
-	public T open()
-	{
+	public T open() {
 		Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
 		createContents(shell);
 		shell.pack();
 		shell.open();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed())
-		{
-			if (!display.readAndDispatch())
-			{
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
 		}
 		return ret;
 	}
 
-	protected void createContents(final Shell shell)
-	{
+	protected void createContents(final Shell shell) {
 
 		shell.setLayout(new GridLayout(2, true));
 		Label label = new Label(shell, SWT.NONE);
@@ -73,10 +65,8 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 		Button newCellBtn = new Button(shell, SWT.PUSH);
 		newCellBtn.setText("Новый");
 		newCellBtn.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		newCellBtn.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		newCellBtn.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				ret = editDialog.open();
 				shell.close();
 			}
@@ -92,15 +82,11 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 		ok.setText("OK");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
-		ok.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
-				if (table.getSelection() != null && table.getSelection().length == 1)
-				{
+		ok.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				if (table.getSelection() != null && table.getSelection().length == 1) {
 					TableItem ti = table.getSelection()[0];
-					if (ti != null)
-					{
+					if (ti != null) {
 						ret = (T) ti.getData();
 						shell.close();
 					}
@@ -112,10 +98,8 @@ public abstract class AbstractSelectDialog<T> extends Dialog
 		cancel.setText("Отмена");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
-		cancel.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		cancel.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				ret = null;
 				shell.close();
 			}

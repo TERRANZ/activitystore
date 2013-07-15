@@ -12,18 +12,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class BlockInputDialog extends Dialog
-{
+public class BlockInputDialog extends Dialog {
 	private String blockName;
 	private String input;
 
-	public BlockInputDialog(Shell arg0)
-	{
+	public BlockInputDialog(Shell arg0) {
 		super(arg0, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 	}
 
-	public String open(String blockName)
-	{
+	public String open(String blockName) {
 		Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
 		this.blockName = blockName;
@@ -31,18 +28,15 @@ public class BlockInputDialog extends Dialog
 		shell.pack();
 		shell.open();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed())
-		{
-			if (!display.readAndDispatch())
-			{
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
 		}
 		return input;
 	}
 
-	private void createContents(final Shell shell)
-	{
+	private void createContents(final Shell shell) {
 		shell.setLayout(new GridLayout(2, true));
 
 		Label label = new Label(shell, SWT.NONE);
@@ -62,10 +56,8 @@ public class BlockInputDialog extends Dialog
 		ok.setText("OK");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
-		ok.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		ok.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				input = text.getText();
 				shell.close();
 			}
@@ -75,10 +67,8 @@ public class BlockInputDialog extends Dialog
 		cancel.setText("Отмена");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
-		cancel.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected(SelectionEvent event)
-			{
+		cancel.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
 				input = null;
 				shell.close();
 			}
