@@ -1,138 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>
-        ru.terra
-    </groupId>
-	<artifactId>
-        activitystore
-    </artifactId>
-	<version>
-        0.0.1-SNAPSHOT
-    </version>
-	<name>
-        activitystore
-    </name>
-
-	<properties>
-		<project.build.sourceEncoding>
-			UTF-8
-		</project.build.sourceEncoding>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>
-                junit
-            </groupId>
-			<artifactId>
-                junit
+<project
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ru.terra</groupId>
+    <artifactId>activitystore</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>activitystore</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <swt.platform>org.eclipse.swt.gtk.linux.x86</swt.platform>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit
             </artifactId>
-			<version>
-                4.7
-            </version>
-			<scope>
-                test	
-            </scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jface</groupId>
-			<artifactId>org.eclipse.jface</artifactId>
-			<version>3.8.0.v20120521-2329</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
-			<version>2.4.0</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.swt</groupId>
-			<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
-			<version>3.7.2</version>
-		</dependency>
-		<dependency>
-			<groupId>
-                mysql
-            </groupId>
-			<artifactId>
-                mysql-connector-java
-            </artifactId>
-			<version>
-                5.1.20
-            </version>
-		</dependency>
-	</dependencies>
-	<repositories>
-		<repository>
-			<id>swt-repo</id>
-			<url>https://swt-repo.googlecode.com/svn/repo/</url>
-		</repository>
-		<repository>
-			<id>EclipseLink Repo</id>
-			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
-
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<build>
-		<plugins>
-
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<mainClass>ru.terra.activitystore.Main</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jface</groupId>
+            <artifactId>org.eclipse.jface</artifactId>
+            <version>3.8.0.v20120521-2329</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>2.4.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.swt</groupId>
+            <artifactId>${swt.platform}</artifactId>
+            <version>3.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.8.3.0</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>swt-repo</id>
+            <url>https://swt-repo.googlecode.com/svn/repo/</url>
+        </repository>
+        <repository>
+            <id>EclipseLink Repo</id>
+            <url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.terra.activitystore.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- this is used for inheritance merges -->
+                        <phase>package</phase>
+                        <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>
                     org.apache.maven.plugins
                 </groupId>
-				<artifactId>
+                <artifactId>
                     maven-compiler-plugin
                 </artifactId>
-				<configuration>
-					<source>
-						1.6
-					</source>
-					<target>
-						1.6
-					</target>
-					<debug>
-						true
-					</debug>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <debug>true</debug>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
